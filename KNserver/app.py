@@ -30,12 +30,12 @@ def not_found(error):
 
 @app.route('/')
 def index():
-    return "Hello m'fing World"  #render_template("root.html")
+    return "World Hello from Baixing"  #render_template("root.html")
 
 '''
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
-    form = LoginForm()
+@app.route('/jieba', methods = ['GET', 'POST'])
+def jieba():
+    form = JiebaForm()
     if form.validate_on_submit():
         # login and validate the user...
             #login_user(user)
@@ -54,7 +54,7 @@ def login():
                     return render_template("index.html", user = user, tasks = Tasks)
                 else:
                     return render_template("login_again.html", form = form)
-    return render_template("login.html", form = form)
+    return render_template("jeiba.html", form = form)
 
     return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
     '''
