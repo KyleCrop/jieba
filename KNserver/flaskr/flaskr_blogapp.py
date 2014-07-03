@@ -75,7 +75,7 @@ def add_entry():
 		abort(401)
 	db = get_db()
 	seg_list = jieba.cut_for_search(request.form['text'])
-	output = "  ".join(seg_list)
+	output = " / ".join(seg_list)
 	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], output])
 	db.commit()
 	flash('New entry was successfully posted')
@@ -105,7 +105,7 @@ def logout():
 
 
 if __name__ == '__main__':
-	app.run(host="0.0.0.0")
+	app.run(host="192.168.2.54")
 
 
 
