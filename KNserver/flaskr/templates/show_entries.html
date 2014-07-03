@@ -15,9 +15,14 @@
       <h2>
         {{ entry.text }}
       </h2>
-      <span>
-      {{ entry.proc }}
-      </span>
+      <script>
+      var processed = JSON.parse(entry.proc);
+      while (processed.length > 0) {
+            var ind = processed.pop();
+            <input type="checkbox">ind<br>
+          }
+      }
+      </script>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}
