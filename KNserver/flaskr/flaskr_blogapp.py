@@ -7,6 +7,7 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import jieba
+import json
 
 """pragma mark createApp"""
 
@@ -74,14 +75,10 @@ def add_entry():
 	if not session.get('logged_in'):
 		abort(401)
 	db = get_db()
-<<<<<<< HEAD
 	seg_list = jieba.cut_for_search(request.form['text'])
 	output = " / ".join(seg_list)
-=======
-	seg_list = jieba.cut_for_search(request.form['text'])  # where the 
-	output = "  ".join(seg_list)						   # magic happens
->>>>>>> 4bcab2ce03798f3dca24137ede84281769af22d6
-	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], output])
+	joutput = json.dumps(output)
+	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], joutput])
 	db.commit()
 	return redirect(url_for('show_entries'))
 
