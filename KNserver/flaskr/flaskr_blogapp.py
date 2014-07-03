@@ -78,7 +78,6 @@ def add_entry():
 	output = " / ".join(seg_list)
 	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], output])
 	db.commit()
-	flash('New entry was successfully posted')
 	return redirect(url_for('show_entries'))
 
 @app.route('/login', methods=['GET', 'POST'])
