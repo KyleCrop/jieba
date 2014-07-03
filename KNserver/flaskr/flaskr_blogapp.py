@@ -65,7 +65,8 @@ def init_db():
 def show_entries():
 	"""Shows entries in the database"""
 	db = get_db()
-	cur = db.execute('select proc, text from entries order by id desc')
+	cur = db.execute('select proc, text from entries order by id desc')  # displays entire entries table
+	# need to make it only pull the very recent entry which matches == "".join(seg_list)
 	entries = cur.fetchall()
 	return render_template('show_entries.html', entries=entries)
 

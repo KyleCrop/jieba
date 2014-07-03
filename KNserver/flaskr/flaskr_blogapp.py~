@@ -7,6 +7,7 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import jieba
+import json
 
 """pragma mark createApp"""
 
@@ -64,7 +65,7 @@ def init_db():
 def show_entries():
 	"""Shows entries in the database"""
 	db = get_db()
-	cur = db.execute('select proc, text from entries order by id desc')
+	cur = db.execute('select proc, text from entries order by id desc')  # displays entire entries table
 	entries = cur.fetchall()
 	return render_template('show_entries.html', entries=entries)
 
@@ -75,10 +76,10 @@ def add_entry():
 		abort(401)
 	db = get_db()
 	seg_list = jieba.cut_for_search(request.form['text'])
-	output = "  ".join(seg_list)
-	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], output])
+	output = " / ".join(seg_list)
+	joutput = json.dumps(output)
+	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], joutput])
 	db.commit()
-	flash('New entry was successfully posted')
 	return redirect(url_for('show_entries'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -105,7 +106,7 @@ def logout():
 
 
 if __name__ == '__main__':
-	app.run(host="0.0.0.0")
+	app.run(host="192.168.2.54")
 
 
 
