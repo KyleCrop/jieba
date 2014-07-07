@@ -20,13 +20,19 @@
 	  var processed = {{ entry.proc|safe }};
 	  processed += "/";
 	  document.write(processed);
-	  
-	  while (processed.length > 0) {
-		  var ind = processed.indexOf('/');
-		  document.write(ind);
-		  var word = processed.slice(0, ind);
+	  </script>
+      
+  {% endfor %}
+  
+  <script>
+      //Create checkboxes
+      var last = {{ latest.proc|safe }};
+
+	  while (last.length > 0) {
+		  var ind = last.indexOf('/');
+		  var word = last.slice(0, ind);
 		  myFunction(word);
-		  processed = processed.slice(ind+1);
+		  processed = last.slice(ind+1);
 	  }
 	  
   	  function myFunction(checkText)
@@ -42,30 +48,8 @@
 	  clickMeText.appendChild(s);
 	  document.body.appendChild(clickMeText);
 	  }
-	  </script>
-      
-      <!-- <button onclick="myFunction()">Try it</button>
-      <script> 
-      /*document.write("{{entry.proc}}");*/
-      
-      /*var all = document.getElementsByTagName("*");
-      for (var i = 0; i < all.length; i++) {
-      	document.write(all[i]);
-      	}*/
-      /*function myFunction() {
-		  var processedTag = document.createElement("BUTTON");
-		  var text = document.createTextNode("{{entry.proc}}");
-		  processedTag.appendChild(text);
-		  document.body.appendChild(processedTag);
-		  }*/
-		  
-      /*while (processed.length > 0) {
-            var ind = processed.pop();
-            <input type="checkbox">ind<br>
-          }
-      }*/
-      </script> -->
-  {% endfor %}
+  </script>
+  	  
   </body>
   </html>
 {% endblock %}

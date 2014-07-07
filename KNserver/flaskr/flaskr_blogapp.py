@@ -68,7 +68,8 @@ def show_entries():
 	cur = db.execute('select proc, text from entries order by id desc')  # displays entire entries table
 	# need to make it only pull the very recent entry which matches == "".join(seg_list)
 	entries = cur.fetchall()
-	return render_template('show_entries.html', entries=entries)
+	latest = cur.fetchone()
+	return render_template('show_entries.html', entries=entries, latest=latest)
 
 @app.route('/add', methods = ['POST'])
 def add_entry():
