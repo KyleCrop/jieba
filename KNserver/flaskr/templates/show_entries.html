@@ -23,7 +23,6 @@
 	  
 	  while (processed.length > 0) {
 		  var ind = processed.indexOf('/');
-		  document.write(ind);
 		  var word = processed.slice(0, ind);
 		  myFunction(word);
 		  processed = processed.slice(ind+1);
