@@ -9,27 +9,27 @@
       </dl>
     </form>
   {% endif %}
-  <!--html>
-  <body-->
+  <html>
+  <body>
   {% for entry in entries %}
-      <!-- h2>
+      <h2>
         {{ entry.text }}
       </h2>
-      <h2> 
-        {{ entry.proc }}
-      </h2-->
 
 	  <script>
 	  var processed = {{ entry.proc|safe }};
+	  processed += "/";
 	  document.write(processed);
-	  /*while (processed.length > 0) {
-	  	var ind = processed.indexOf('/');
-	  	var word = processed[0 : ind];
-	  	myFunction(word);
-	  	processed = processed[ind+1 : ];
-	  }*/
 	  
-  	  /*function myFunction(checkText)
+	  while (processed.length > 0) {
+		  var ind = processed.indexOf('/');
+		  document.write(ind);
+		  var word = processed.slice(0, ind);
+		  myFunction(word);
+		  processed = processed.slice(ind+1);
+	  }
+	  
+  	  function myFunction(checkText)
 	  {
 	  var btn=document.createElement("INPUT");
 	  btn.type = "CHECKBOX";
@@ -41,7 +41,7 @@
 	  var s = document.createTextNode(checkText);
 	  clickMeText.appendChild(s);
 	  document.body.appendChild(clickMeText);
-	  }*/
+	  }
 	  </script>
       
       <!-- <button onclick="myFunction()">Try it</button>
@@ -66,6 +66,6 @@
       }*/
       </script> -->
   {% endfor %}
-  <!--/body>
-  </html-->
+  </body>
+  </html>
 {% endblock %}
