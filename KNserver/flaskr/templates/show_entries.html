@@ -9,47 +9,43 @@
       </dl>
     </form>
   {% endif %}
-  <html>
   <body>
-  {% for entry in entries %}
+    {% for entry in entries %}
+  
       <h2>
         {{ entry.text }}
       </h2>
-
-	  <script>
-	  var processed = {{ entry.proc|safe }};
-	  processed += "/";
-	  document.write(processed);
-	  </script>
-      
-  {% endfor %}
   
-  <script>
+      <script>
+        var processed = {{ entry.proc|safe }};
+        processed += "/";
+        document.write(processed);
+      </script>
+  
+    {% endfor %}
+    <h2> {{ latest.proc|safe }} </h2>
+    <script>
       //Create checkboxes
       var last = {{ latest.proc|safe }};
-
-	  while (last.length > 0) {
-		  var ind = last.indexOf('/');
-		  var word = last.slice(0, ind);
-		  myFunction(word);
-		  processed = last.slice(ind+1);
-	  }
-	  
-  	  function myFunction(checkText)
-	  {
-	  var btn=document.createElement("INPUT");
-	  btn.type = "CHECKBOX";
-	  var t=document.createTextNode("");
-	  btn.appendChild(t);
-	  document.body.appendChild(btn);
-	  
-	  var clickMeText = document.createElement("noButton");
-	  var s = document.createTextNode(checkText);
-	  clickMeText.appendChild(s);
-	  document.body.appendChild(clickMeText);
-	  }
-  </script>
-  	  
+      while (last.length > 0) {
+        var ind = last.indexOf('/');
+        var word = last.slice(0, ind);
+        myFunction(word);
+        processed = last.slice(ind+1);
+      }
+  
+      function myFunction(checkText) {
+        var btn=document.createElement("INPUT");
+        btn.type = "CHECKBOX";
+        var t=document.createTextNode("");
+        btn.appendChild(t);
+        document.body.appendChild(btn);
+        
+        var clickMeText = document.createElement("noButton");
+        var s = document.createTextNode(checkText);
+        clickMeText.appendChild(s);
+        document.body.appendChild(clickMeText);
+      }
+    </script>
   </body>
-  </html>
 {% endblock %}
