@@ -1,0 +1,3854 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fnil\fcharset0 Georgia;\f2\fnil\fcharset0 Consolas;
+\f3\fnil\fcharset0 Consolas-Bold;\f4\fnil\fcharset0 Consolas-Italic;}
+{\colortbl;\red255\green255\blue255;\red213\green213\blue213;\red47\green51\blue57;\red26\green26\blue26;
+\red227\green235\blue236;\red159\green0\blue17;\red234\green234\blue234;\red85\green85\blue85;\red153\green119\blue22;
+\red167\green0\blue5;\red249\green249\blue249;\red152\green0\blue4;\red38\green38\blue38;\red52\green52\blue52;
+\red154\green154\blue154;\red41\green41\blue41;\red117\green117\blue117;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid201\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid301\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid4}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Synopsis\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 A template is simply a text file. It can generate any text-based format (HTML, XML, CSV, LaTeX, etc.). It doesn\'92t have a specific extension, 
+\f2\fs28 \cf4 \cb5 .html
+\f1\fs34 \cf3 \cb1  or 
+\f2\fs28 \cf4 \cb5 .xml
+\f1\fs34 \cf3 \cb1  are just fine.\
+A template contains 
+\b variables
+\b0  or 
+\b expressions
+\b0 , which get replaced with values when the template is evaluated, and tags, which control the logic of the template. The template syntax is heavily inspired by Django and Python.\
+Below is a minimal template that illustrates a few basics. We will cover the details later in that document:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <html
+\f2\b0 \cf3  \cf8 lang=\cf9 "en"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <head>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <title>
+\f2\b0 \cf3 My Webpage
+\f3\b \cf8 </title>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 </head>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <body>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <ul
+\f2\b0 \cf3  \cf8 id=\cf9 "navigation"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  navigation \cf6 %\}\cf3 \
+        
+\f3\b \cf8 <li><a
+\f2\b0 \cf3  \cf8 href=\cf9 "\cf6 \{\{\cf3  item.href \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  item.caption \cf6 \}\}
+\f3\b \cf8 </a></li>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\
+    
+\f3\b \cf8 <h1>
+\f2\b0 \cf3 My Webpage
+\f3\b \cf8 </h1>
+\f2\b0 \cf3 \
+    \cf6 \{\{\cf3  a_variable \cf6 \}\}\cf3 \
+
+\f3\b \cf8 </body>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 </html>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 This covers the default settings. The application developer might have changed the syntax from 
+\f2\fs28 \cf4 \cb5 \{% foo %\}
+\f1\fs34 \cf3 \cb1  to 
+\f2\fs28 \cf4 \cb5 <% foo %>
+\f1\fs34 \cf3 \cb1  or something similar.\
+There are two kinds of delimiters. 
+\f2\fs28 \cf4 \cb5 \{% ... %\}
+\f1\fs34 \cf3 \cb1  and 
+\f2\fs28 \cf4 \cb5 \{\{ ... \}\}
+\f1\fs34 \cf3 \cb1 . The first one is used to execute statements such as for-loops or assign values, the latter prints the result of the expression to the template.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Variables\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The application passes variables to the templates you can mess around in the template. Variables may have attributes or elements on them you can access too. How a variable looks like, heavily depends on the application providing those.\
+You can use a dot (
+\f2\fs28 \cf4 \cb5 .
+\f1\fs34 \cf3 \cb1 ) to access attributes of a variable, alternative the so-called \'93subscript\'94 syntax (
+\f2\fs28 \cf4 \cb5 []
+\f1\fs34 \cf3 \cb1 ) can be used. The following lines do the same:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  foo.bar \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  foo[\cf9 'bar'\cf3 ] \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 It\'92s important to know that the curly braces are 
+\i not
+\i0  part of the variable but the print statement. If you access variables inside tags don\'92t put the braces around.\
+If a variable or attribute does not exist you will get back an undefined value. What you can do with that kind of value depends on the application configuration, the default behavior is that it evaluates to an empty string if printed and that you can iterate over it, but every other operation fails.\
+\pard\pardeftab720
+
+\fs48 \cf3 \cb11 Implementation
+\fs34 \
+For convenience sake 
+\f2\fs28 \cf4 \cb5 foo.bar
+\f1\fs34 \cf3 \cb11  in Jinja2 does the following things on the Python layer:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf3 {\listtext	\'95	}check if there is an attribute called 
+\i bar
+\i0  on 
+\i foo
+\i0 .\
+{\listtext	\'95	}if there is not, check if there is an item 
+\f2\fs28 \cf4 \cb5 'bar'
+\f1\fs34 \cf3 \cb11  in 
+\i foo
+\i0 .\
+{\listtext	\'95	}if there is not, return an undefined object.\
+\pard\pardeftab720\sa340
+
+\f2\fs28 \cf4 \cb5 foo['bar']
+\f1\fs34 \cf3 \cb11  on the other hand works mostly the same with the a small difference in the order:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls2\ilvl0\cf3 {\listtext	\'95	}check if there is an item 
+\f2\fs28 \cf4 \cb5 'bar'
+\f1\fs34 \cf3 \cb11  in 
+\i foo
+\i0 .\
+{\listtext	\'95	}if there is not, check if there is an attribute called 
+\i bar
+\i0  on 
+\i foo
+\i0 .\
+{\listtext	\'95	}if there is not, return an undefined object.\
+\pard\pardeftab720
+\cf3 This is important if an object has an item or attribute with the same name. Additionally there is the 
+\f3\b\fs28 \cf4 \cb5 attr()
+\f1\b0\fs34 \cf3 \cb11  filter that just looks up attributes.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Filters\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Variables can be modified by 
+\b filters
+\b0 . Filters are separated from the variable by a pipe symbol (
+\f2\fs28 \cf4 \cb5 |
+\f1\fs34 \cf3 \cb1 ) and may have optional arguments in parentheses. Multiple filters can be chained. The output of one filter is applied to the next.\
+
+\f2\fs28 \cf4 \cb5 \{\{ name|striptags|title \}\}
+\f1\fs34 \cf3 \cb1  for example will remove all HTML Tags from the 
+\i name
+\i0  and title-cases it. Filters that accept arguments have parentheses around the arguments, like a function call. This example will join a list by commas: 
+\f2\fs28 \cf4 \cb5 \{\{ list|join(', ') \}\}
+\f1\fs34 \cf3 \cb1 .\
+The 
+\i \cf12 List of Builtin Filters
+\i0 \cf3  below describes all the builtin filters.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Tests\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Beside filters there are also so called \'93tests\'94 available. Tests can be used to test a variable against a common expression. To test a variable or expression you add 
+\i is
+\i0  plus the name of the test after the variable. For example to find out if a variable is defined you can do 
+\f2\fs28 \cf4 \cb5 name is defined
+\f1\fs34 \cf3 \cb1  which will then return true or false depending on if 
+\i name
+\i0  is defined.\
+Tests can accept arguments too. If the test only takes one argument you can leave out the parentheses to group them. For example the following two expressions do the same:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  \cf13 loop\cf3 .index 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 divisibleby\cf3  \cf14 3\cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  \cf13 loop\cf3 .index 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 divisibleby\cf3 (\cf14 3\cf3 ) \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The 
+\i \cf12 List of Builtin Tests
+\i0 \cf3  below describes all the builtin tests.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Comments\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 To comment-out part of a line in a template, use the comment syntax which is by default set to 
+\f2\fs28 \cf4 \cb5 \{# ... #\}
+\f1\fs34 \cf3 \cb1 . This is useful to comment out parts of the template for debugging or to add information for other template designers or yourself:\
+\pard\pardeftab720
+
+\f4\i\fs28 \cf15 \cb7 \{# note: disabled template because we no longer use this
+\f2\i0 \cf3 \
+
+\f4\i \cf15     \{% for user in users %\}
+\f2\i0 \cf3 \
+
+\f4\i \cf15         ...
+\f2\i0 \cf3 \
+
+\f4\i \cf15     \{% endfor %\}
+\f2\i0 \cf3 \
+
+\f4\i \cf15 #\}
+\f2\i0 \cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Whitespace Control\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 In the default configuration, a single trailing newline is stripped if present, and whitespace is not further modified by the template engine. Each whitespace (spaces, tabs, newlines etc.) is returned unchanged. If the application configures Jinja to 
+\i trim_blocks
+\i0  the first newline after a template tag is removed automatically (like in PHP). The 
+\i lstrip_blocks
+\i0  option can also be set to strip tabs and spaces from the beginning of line to the start of a block. (Nothing will be stripped if there are other characters before the start of the block.)\
+With both 
+\i trim_blocks
+\i0  and 
+\i lstrip_blocks
+\i0  enabled you can put block tags on their own lines, and the entire block line will be removed when rendered, preserving the whitespace of the contents. For example, without the 
+\i trim_blocks
+\i0  and 
+\i lstrip_blocks
+\i0  options, this template:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <div>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  
+\f3\b \cf10 True
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+        yay\
+    \cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 gets rendered with blank lines inside the div:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <div>
+\f2\b0 \cf3 \
+\
+        yay\
+\
+
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 But with both 
+\i trim_blocks
+\i0  and 
+\i lstrip_blocks
+\i0  enabled, the lines with the template blocks are removed while preserving the whitespace of the contents:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <div>
+\f2\b0 \cf3 \
+        yay\
+
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 You can manually disable the 
+\i lstrip_blocks
+\i0  behavior by putting a plus sign (
+\f2\fs28 \cf4 \cb5 +
+\f1\fs34 \cf3 \cb1 ) at the start of a block:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <div>
+\f2\b0 \cf3 \
+        \{%+ if something %\}yay\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 You can also strip whitespace in templates by hand. If you put an minus sign (
+\f2\fs28 \cf4 \cb5 -
+\f1\fs34 \cf3 \cb1 ) to the start or end of an block (for example a for tag), a comment or variable expression you can remove the whitespaces after or before that block:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  seq -\cf6 %\}\cf3 \
+    \cf6 \{\{\cf3  item \cf6 \}\}\cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 This will yield all elements without whitespace between them. If 
+\i seq
+\i0  was a list of numbers from 
+\f2\fs28 \cf4 \cb5 1
+\f1\fs34 \cf3 \cb1  to 
+\f2\fs28 \cf4 \cb5 9
+\f1\fs34 \cf3 \cb1  the output would be 
+\f2\fs28 \cf4 \cb5 123456789
+\f1\fs34 \cf3 \cb1 .\
+If 
+\i \cf12 Line Statements
+\i0 \cf3  are enabled they strip leading whitespace automatically up to the beginning of the line.\
+Jinja2 by default also removes trailing newlines. To keep the single trailing newline when it is present, configure Jinja to 
+\i keep_trailing_newline
+\i0 .\
+\pard\pardeftab720
+
+\fs48 \cf3 \cb11 Note
+\fs34 \
+You must not use a whitespace between the tag and the minus sign.\
+\pard\pardeftab720\sa340
+
+\b \cf3 valid
+\b0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3 - 
+\f3\b \cf10 if
+\f2\b0 \cf3  foo -\cf6 %\}\cf3 ...\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\b\fs34 \cf3 \cb11 invalid
+\b0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 \{% - if foo - %\}...\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Escaping\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 It is sometimes desirable or even necessary to have Jinja ignore parts it would otherwise handle as variables or blocks. For example if the default syntax is used and you want to use 
+\f2\fs28 \cf4 \cb5 \{\{
+\f1\fs34 \cf3 \cb1  as raw string in the template and not start a variable you have to use a trick.\
+The easiest way is to output the variable delimiter (
+\f2\fs28 \cf4 \cb5 \{\{
+\f1\fs34 \cf3 \cb1 ) by using a variable expression:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf9 '\{\{'\cf3  \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 For bigger sections it makes sense to mark a block 
+\i raw
+\i0 . For example to put Jinja syntax as example into a template you can use this snippet:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 raw
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    <ul>\
+    \{% for item in seq %\}\
+        <li>\{\{ item \}\}</li>\
+    \{% endfor %\}\
+    </ul>\
+\cf6 \{%\cf3  
+\f3\b \cf10 endraw
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Line Statements\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 If line statements are enabled by the application it\'92s possible to mark a line as a statement. For example if the line statement prefix is configured to 
+\f2\fs28 \cf4 \cb5 #
+\f1\fs34 \cf3 \cb1  the following two examples are equivalent:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+# for item in seq\
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  item \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+# endfor\
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\
+
+\f3\b \cf8 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  seq \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  item \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The line statement prefix can appear anywhere on the line as long as no text precedes it. For better readability statements that start a block (such as 
+\i for
+\i0 , 
+\i if
+\i0 , 
+\i elif
+\i0  etc.) may end with a colon:\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 # for item in seq:\
+    ...\
+# endfor\
+\pard\pardeftab720
+
+\f1\fs48 \cf3 \cb11 Note
+\fs34 \
+Line statements can span multiple lines if there are open parentheses, braces or brackets:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+# for href, caption in [('index.html', 'Index'),\
+                        ('about.html', 'About')]:\
+    
+\f3\b \cf8 <li><a
+\f2\b0 \cf3  \cf8 href=\cf9 "\cf6 \{\{\cf3  href \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  caption \cf6 \}\}
+\f3\b \cf8 </a></li>
+\f2\b0 \cf3 \
+# endfor\
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Since Jinja 2.2 line-based comments are available as well. For example if the line-comment prefix is configured to be 
+\f2\fs28 \cf4 \cb5 ##
+\f1\fs34 \cf3 \cb1  everything from 
+\f2\fs28 \cf4 \cb5 ##
+\f1\fs34 \cf3 \cb1  to the end of the line is ignored (excluding the newline sign):\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 # for item in seq:\
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  item \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3      ## this comment is ignored\
+# endfor\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Template Inheritance\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The most powerful part of Jinja is template inheritance. Template inheritance allows you to build a base \'93skeleton\'94 template that contains all the common elements of your site and defines 
+\b blocks
+\b0  that child templates can override.\
+Sounds complicated but is very basic. It\'92s easiest to understand it by starting with an example.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Base Template\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 This template, which we\'92ll call 
+\f2\fs28 \cf4 \cb5 base.html
+\f1\fs34 \cf3 \cb1 , defines a simple HTML skeleton document that you might use for a simple two-column page. It\'92s the job of \'93child\'94 templates to fill the empty blocks with content:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <html
+\f2\b0 \cf3  \cf8 lang=\cf9 "en"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <html
+\f2\b0 \cf3  \cf8 xmlns=\cf9 "http://www.w3.org/1999/xhtml"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <head>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  head \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <link
+\f2\b0 \cf3  \cf8 rel=\cf9 "stylesheet"\cf3  \cf8 href=\cf9 "style.css"\cf3  
+\f3\b \cf8 />
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <title>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  title \cf6 %\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3  - My Webpage
+\f3\b \cf8 </title>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+
+\f3\b \cf8 </head>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <body>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <div
+\f2\b0 \cf3  \cf8 id=\cf9 "content"
+\f3\b \cf8 >
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  content \cf6 %\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <div
+\f2\b0 \cf3  \cf8 id=\cf9 "footer"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+        \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  footer \cf6 %\}\cf3 \
+        
+\f3\b \cf16 &copy;
+\f2\b0 \cf3  Copyright 2008 by 
+\f3\b \cf8 <a
+\f2\b0 \cf3  \cf8 href=\cf9 "http://domain.invalid/"
+\f3\b \cf8 >
+\f2\b0 \cf3 you
+\f3\b \cf8 </a>
+\f2\b0 \cf3 .\
+        \cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 </body>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 In this example, the 
+\f2\fs28 \cf4 \cb5 \{% block %\}
+\f1\fs34 \cf3 \cb1  tags define four blocks that child templates can fill in. All the 
+\i block
+\i0  tag does is to tell the template engine that a child template may override those portions of the template.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Child Template\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 A child template might look like this:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 extends
+\f2\b0 \cf3  \cf9 "base.html"\cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  title \cf6 %\}\cf3 Index\cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  head \cf6 %\}\cf3 \
+    \cf6 \{\{\cf3  \cf13 super\cf3 () \cf6 \}\}\cf3 \
+    
+\f3\b \cf8 <style 
+\f2\b0 type=\cf9 "text/css"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+        
+\f3\b \cf13 .important
+\f2\b0 \cf3  \{ 
+\f3\b \cf10 color
+\f2\b0 \cf3 : \cf14 #336699\cf3 ; \}\
+    
+\f3\b \cf8 </style>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  content \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <h1>
+\f2\b0 \cf3 Index
+\f3\b \cf8 </h1>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <p
+\f2\b0 \cf3  \cf8 class=\cf9 "important"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+      Welcome on my awesome homepage.\
+    
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The 
+\f2\fs28 \cf4 \cb5 \{% extends %\}
+\f1\fs34 \cf3 \cb1  tag is the key here. It tells the template engine that this template \'93extends\'94 another template. When the template system evaluates this template, first it locates the parent. The extends tag should be the first tag in the template. Everything before it is printed out normally and may cause confusion. For details about this behavior and how to take advantage of it, see {\field{\*\fldinst{HYPERLINK "http://jinja.pocoo.org/docs/tricks/#null-master-fallback"}}{\fldrslt 
+\i \cf12 Null-Master Fallback}}.\
+The filename of the template depends on the template loader. For example the 
+\f3\b\fs28 \cf4 \cb5 FileSystemLoader
+\f1\b0\fs34 \cf3 \cb1  allows you to access other templates by giving the filename. You can access templates in subdirectories with a slash:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 extends
+\f2\b0 \cf3  \cf9 "layout/default.html"\cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 But this behavior can depend on the application embedding Jinja. Note that since the child template doesn\'92t define the 
+\f2\fs28 \cf4 \cb5 footer
+\f1\fs34 \cf3 \cb1  block, the value from the parent template is used instead.\
+You can\'92t define multiple 
+\f2\fs28 \cf4 \cb5 \{% block %\}
+\f1\fs34 \cf3 \cb1  tags with the same name in the same template. This limitation exists because a block tag works in \'93both\'94 directions. That is, a block tag doesn\'92t just provide a hole to fill - it also defines the content that fills the hole in the 
+\i parent
+\i0 . If there were two similarly-named 
+\f2\fs28 \cf4 \cb5 \{% block %\}
+\f1\fs34 \cf3 \cb1  tags in a template, that template\'92s parent wouldn\'92t know which one of the blocks\'92 content to use.\
+If you want to print a block multiple times you can however use the special 
+\i self
+\i0  variable and call the block with that name:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <title>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  title \cf6 %\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </title>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <h1>
+\f2\b0 \cf6 \{\{\cf3  self.title() \cf6 \}\}
+\f3\b \cf8 </h1>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  body \cf6 %\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Super Blocks\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 It\'92s possible to render the contents of the parent block by calling 
+\i super
+\i0 . This gives back the results of the parent block:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  sidebar \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <h3>
+\f2\b0 \cf3 Table Of Contents
+\f3\b \cf8 </h3>
+\f2\b0 \cf3 \
+    ...\
+    \cf6 \{\{\cf3  \cf13 super\cf3 () \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Named Block End-Tags\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Jinja2 allows you to put the name of the block after the end tag for better readability:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  sidebar \cf6 %\}\cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  inner_sidebar \cf6 %\}\cf3 \
+        ...\
+    \cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  inner_sidebar \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  sidebar \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 However the name after the 
+\i endblock
+\i0  word must match the block name.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Block Nesting and Scope\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Blocks can be nested for more complex layouts. However per default blocks may not access variables from outer scopes:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  seq \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  loop_item \cf6 %\}\{\{\cf3  item \cf6 \}\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 This example would output empty 
+\f2\fs28 \cf4 \cb5 <li>
+\f1\fs34 \cf3 \cb1  items because 
+\i item
+\i0  is unavailable inside the block. The reason for this is that if the block is replaced by a child template a variable would appear that was not defined in the block or passed to the context.\
+Starting with Jinja 2.2 you can explicitly specify that variables are available in a block by setting the block to \'93scoped\'94 by adding the 
+\i scoped
+\i0  modifier to a block declaration:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  seq \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 block
+\f2\b0 \cf3  loop_item 
+\f3\b \cf10 scoped
+\f2\b0 \cf3  \cf6 %\}\{\{\cf3  item \cf6 \}\}\{%\cf3  
+\f3\b \cf10 endblock
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 When overriding a block the 
+\i scoped
+\i0  modifier does not have to be provided.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Template Objects\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 Changed in version 2.4.
+\i0 \
+If a template object was passed to the template context you can extend from that object as well. Assuming the calling code passes a layout template as 
+\i layout_template
+\i0  to the environment, this code works:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 extends
+\f2\b0 \cf3  layout_template \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Previously the 
+\i layout_template
+\i0  variable had to be a string with the layout template\'92s filename for this to work.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 HTML Escaping\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 When generating HTML from templates, there\'92s always a risk that a variable will include characters that affect the resulting HTML. There are two approaches: manually escaping each variable or automatically escaping everything by default.\
+Jinja supports both, but what is used depends on the application configuration. The default configuaration is no automatic escaping for various reasons:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls3\ilvl0\cf3 {\listtext	\'95	}escaping everything except of safe values will also mean that Jinja is escaping variables known to not include HTML such as numbers which is a huge performance hit.\
+{\listtext	\'95	}The information about the safety of a variable is very fragile. It could happen that by coercing safe and unsafe values the return value is double escaped HTML.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Working with Manual Escaping\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 If manual escaping is enabled it\'92s 
+\b your
+\b0  responsibility to escape variables if needed. What to escape? If you have a variable that 
+\i may
+\i0  include any of the following chars (
+\f2\fs28 \cf4 \cb5 >
+\f1\fs34 \cf3 \cb1 , 
+\f2\fs28 \cf4 \cb5 <
+\f1\fs34 \cf3 \cb1 , 
+\f2\fs28 \cf4 \cb5 &
+\f1\fs34 \cf3 \cb1 , or 
+\f2\fs28 \cf4 \cb5 "
+\f1\fs34 \cf3 \cb1 ) you 
+\b have to
+\b0  escape it unless the variable contains well-formed and trusted HTML. Escaping works by piping the variable through the 
+\f2\fs28 \cf4 \cb5 |e
+\f1\fs34 \cf3 \cb1  filter: 
+\f2\fs28 \cf4 \cb5 \{\{ user.username|e \}\}
+\f1\fs34 \cf3 \cb1 .\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Working with Automatic Escaping\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 When automatic escaping is enabled everything is escaped by default except for values explicitly marked as safe. Those can either be marked by the application or in the template by using the 
+\i |safe
+\i0  filter. The main problem with this approach is that Python itself doesn\'92t have the concept of tainted values so the information if a value is safe or unsafe can get lost. If the information is lost escaping will take place which means that you could end up with double escaped contents.\
+Double escaping is easy to avoid however, just rely on the tools Jinja2 provides and don\'92t use builtin Python constructs such as the string modulo operator.\
+Functions returning template data (macros, 
+\i super
+\i0 , 
+\i self.BLOCKNAME
+\i0 ) return safe markup always.\
+String literals in templates with automatic escaping are considered unsafe too. The reason for this is that the safe string is an extension to Python and not every library will work properly with it.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 List of Control Structures\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 A control structure refers to all those things that control the flow of a program - conditionals (i.e. if/elif/else), for-loops, as well as things like macros and blocks. Control structures appear inside 
+\f2\fs28 \cf4 \cb5 \{% ... %\}
+\f1\fs34 \cf3 \cb1  blocks in the default syntax.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 For\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Loop over each item in a sequence. For example, to display a list of users provided in a variable called 
+\i users
+\i0 :\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <h1>
+\f2\b0 \cf3 Members
+\f3\b \cf8 </h1>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+  
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  user.username|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 As variables in templates retain their object properties, it is possible to iterate over containers like 
+\i dict
+\i0 :\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <dl>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  key, value 
+\f3\b \cf10 in
+\f2\b0 \cf3  my_dict.iteritems() \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <dt>
+\f2\b0 \cf6 \{\{\cf3  key|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </dt>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  value|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Note however that dictionaries usually are unordered so you might want to either pass it as a sorted list to the template or use the 
+\i dictsort
+\i0  filter.\
+Inside of a for-loop block you can access some special variables:\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrs\brdrw20\brdrcf17 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalb \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalb \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\b \cf3 Variable\cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 Description\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i\b0 \cf3 loop.index
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 The current iteration of the loop. (1 indexed)\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.index0
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 The current iteration of the loop. (0 indexed)\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.revindex
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 The number of iterations from the end of the loop (1 indexed)\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.revindex0
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 The number of iterations from the end of the loop (0 indexed)\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.first
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 True if first iteration.\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.last
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 True if last iteration.\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.length
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 The number of items in the sequence.\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.cycle
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 A helper function to cycle between a list of sequences. See the explanation below.\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.depth
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 Indicates how deep in deep in a recursive loop the rendering currently is. Starts at level 1\cell \row
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw20\brdrcf17 \trbrdrb\brdrs\brdrw20\brdrcf17 \trbrdrr\brdrs\brdrw20\brdrcf17 
+\clvertalt \clshdrawnil \clwWidth3640\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth8620\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf17 \clbrdrl\brdrs\brdrw20\brdrcf17 \clbrdrb\brdrs\brdrw20\brdrcf17 \clbrdrr\brdrs\brdrw20\brdrcf17 \clpadt80 \clpadl220 \clpadb80 \clpadr220 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\i \cf3 loop.depth0
+\i0 \cell 
+\pard\intbl\itap1\pardeftab720
+\cf3 Indicates how deep in deep in a recursive loop the rendering currently is. Starts at level 0\cell \lastrow\row
+\pard\pardeftab720\sa340
+\cf3 Within a for-loop, it\'92s possible to cycle among a list of strings/variables each time through the loop by using the special 
+\i loop.cycle
+\i0  helper:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  row 
+\f3\b \cf10 in
+\f2\b0 \cf3  rows \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li
+\f2\b0 \cf3  \cf8 class=\cf9 "\cf6 \{\{\cf3  \cf13 loop\cf3 .cycle(\cf9 'odd'\cf3 , \cf9 'even'\cf3 ) \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  row \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Since Jinja 2.1 an extra 
+\i cycle
+\i0  helper exists that allows loop-unbound cycling. For more information have a look at the 
+\i \cf12 List of Global Functions
+\i0 \cf3 .\
+Unlike in Python it\'92s not possible to 
+\i break
+\i0  or 
+\i continue
+\i0  in a loop. You can however filter the sequence during iteration which allows you to skip items. The following example skips all the users which are hidden:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users 
+\f3\b \cf10 if
+\f2\b0 \cf3  
+\f3\b \cf10 not
+\f2\b0 \cf3  user.hidden \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  user.username|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The advantage is that the special 
+\i loop
+\i0  variable will count correctly thus not counting the users not iterated over.\
+If no iteration took place because the sequence was empty or the filtering removed all the items from the sequence you can render a replacement block by using 
+\i else
+\i0 :\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  user.username|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 else
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li><em>
+\f2\b0 \cf3 no users found
+\f3\b \cf8 </em></li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Note that in Python 
+\i else
+\i0  blocks are executed whenever the corresponding loop did not 
+\i break
+\i0 . Since in Jinja loops cannot 
+\i break
+\i0  anyway, a slightly different behavior of the 
+\i else
+\i0  keyword was chosen.\
+It is also possible to use loops recursively. This is useful if you are dealing with recursive data such as sitemaps. To use loops recursively you basically have to add the 
+\i recursive
+\i0  modifier to the loop definition and call the 
+\i loop
+\i0  variable with the new iterable where you want to recurse.\
+The following example implements a sitemap with recursive loops:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul
+\f2\b0 \cf3  \cf8 class=\cf9 "sitemap"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  sitemap 
+\f3\b \cf10 recursive
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li><a
+\f2\b0 \cf3  \cf8 href=\cf9 "\cf6 \{\{\cf3  item.href|\cf13 e\cf3  \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  item.title \cf6 \}\}
+\f3\b \cf8 </a>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 if
+\f2\b0 \cf3  item.children -\cf6 %\}\cf3 \
+        
+\f3\b \cf8 <ul
+\f2\b0 \cf3  \cf8 class=\cf9 "submenu"
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  \cf13 loop\cf3 (item.children) \cf6 \}\}
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The 
+\i loop
+\i0  variable always refers to the closest (innermost) loop. If we have more than one levels of loops, we can rebind the variable 
+\i loop
+\i0  by writing 
+\i \{% set outer_loop = loop %\}
+\i0  after the loop that we want to use recursively. Then, we can call it using 
+\i \{\{ outer_loop(...) \}\}
+\i0 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 If\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The 
+\i if
+\i0  statement in Jinja is comparable with the if statements of Python. In the simplest form you can use it to test if a variable is defined, not empty or not false:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  user.username|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 For multiple branches 
+\i elif
+\i0  and 
+\i else
+\i0  can be used like in Python. You can use more complex 
+\i \cf12 Expressions
+\i0 \cf3  there too:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  kenny.sick \cf6 %\}\cf3 \
+    Kenny is sick.\
+\cf6 \{%\cf3  
+\f3\b \cf10 elif
+\f2\b0 \cf3  kenny.dead \cf6 %\}\cf3 \
+    You killed Kenny!  You bastard!!!\
+\cf6 \{%\cf3  
+\f3\b \cf10 else
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    Kenny looks okay --- so far\
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 If can also be used as 
+\i \cf12 inline expression
+\i0 \cf3  and for 
+\i \cf12 loop filtering
+\i0 \cf3 .\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Macros\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Macros are comparable with functions in regular programming languages. They are useful to put often used idioms into reusable functions to not repeat yourself.\
+Here a small example of a macro that renders a form element:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 macro
+\f2\b0 \cf3  input(name, value=\cf9 ''\cf3 , type=\cf9 'text'\cf3 , size=\cf14 20\cf3 ) -\cf6 %\}\cf3 \
+    
+\f3\b \cf8 <input
+\f2\b0 \cf3  \cf8 type=\cf9 "\cf6 \{\{\cf3  type \cf6 \}\}\cf9 "\cf3  \cf8 name=\cf9 "\cf6 \{\{\cf3  name \cf6 \}\}\cf9 "\cf3  \cf8 value=\cf9 "\cf6 \{\{\cf3 \
+        value|\cf13 e\cf3  \cf6 \}\}\cf9 "\cf3  \cf8 size=\cf9 "\cf6 \{\{\cf3  size \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endmacro
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The macro can then be called like a function in the namespace:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <p>
+\f2\b0 \cf6 \{\{\cf3  input(\cf9 'username'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <p>
+\f2\b0 \cf6 \{\{\cf3  input(\cf9 'password'\cf3 , type=\cf9 'password'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 If the macro was defined in a different template you have to 
+\i \cf12 import
+\i0 \cf3  it first.\
+Inside macros you have access to three special variables:\
+\pard\pardeftab720
+
+\i \cf3 varargs
+\i0 \
+If more positional arguments are passed to the macro than accepted by the macro they end up in the special 
+\i varargs
+\i0  variable as list of values.\
+
+\i kwargs
+\i0 \
+Like 
+\i varargs
+\i0  but for keyword arguments. All unconsumed keyword arguments are stored in this special variable.\
+
+\i caller
+\i0 \
+If the macro was called from a 
+\i \cf12 call
+\i0 \cf3  tag the caller is stored in this variable as macro which can be called.\
+\pard\pardeftab720\sa340
+\cf3 Macros also expose some of their internal details. The following attributes are available on a macro object:\
+\pard\pardeftab720
+
+\i \cf3 name
+\i0 \
+The name of the macro. 
+\f2\fs28 \cf4 \cb5 \{\{ input.name \}\}
+\f1\fs34 \cf3 \cb1  will print 
+\f2\fs28 \cf4 \cb5 input
+\f1\fs34 \cf3 \cb1 .\
+
+\i arguments
+\i0 \
+A tuple of the names of arguments the macro accepts.\
+
+\i defaults
+\i0 \
+A tuple of default values.\
+
+\i catch_kwargs
+\i0 \
+This is 
+\i true
+\i0  if the macro accepts extra keyword arguments (ie: accesses the special 
+\i kwargs
+\i0  variable).\
+
+\i catch_varargs
+\i0 \
+This is 
+\i true
+\i0  if the macro accepts extra positional arguments (ie: accesses the special 
+\i varargs
+\i0  variable).\
+
+\i caller
+\i0 \
+This is 
+\i true
+\i0  if the macro accesses the special 
+\i caller
+\i0  variable and may be called from a 
+\i \cf12 call
+\i0 \cf3  tag.\
+\pard\pardeftab720\sa340
+\cf3 If a macro name starts with an underscore it\'92s not exported and can\'92t be imported.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Call\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 In some cases it can be useful to pass a macro to another macro. For this purpose you can use the special 
+\i call
+\i0  block. The following example shows a macro that takes advantage of the call functionality and how it can be used:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 macro
+\f2\b0 \cf3  render_dialog(title, class=\cf9 'dialog'\cf3 ) -\cf6 %\}\cf3 \
+    
+\f3\b \cf8 <div
+\f2\b0 \cf3  \cf8 class=\cf9 "\cf6 \{\{\cf3  class \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <h2>
+\f2\b0 \cf6 \{\{\cf3  title \cf6 \}\}
+\f3\b \cf8 </h2>
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <div
+\f2\b0 \cf3  \cf8 class=\cf9 "contents"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+            \cf6 \{\{\cf3  caller() \cf6 \}\}\cf3 \
+        
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endmacro
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 call
+\f2\b0 \cf3  render_dialog(\cf9 'Hello World'\cf3 ) \cf6 %\}\cf3 \
+    This is a simple dialog rendered by using a macro and\
+    a call block.\
+\cf6 \{%\cf3  
+\f3\b \cf10 endcall
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 It\'92s also possible to pass arguments back to the call block. This makes it useful as replacement for loops. Generally speaking a call block works exactly like an macro, just that it doesn\'92t have a name.\
+Here an example of how a call block can be used with arguments:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 macro
+\f2\b0 \cf3  dump_users(users) -\cf6 %\}\cf3 \
+    
+\f3\b \cf8 <ul>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+        
+\f3\b \cf8 <li><p>
+\f2\b0 \cf6 \{\{\cf3  user.username|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </p>
+\f2\b0 \cf6 \{\{\cf3  caller(user) \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endmacro
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 call
+\f2\b0 \cf3 (user) dump_users(list_of_user) \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <dl>
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <dl>
+\f2\b0 \cf3 Realname
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  user.realname|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <dl>
+\f2\b0 \cf3 Description
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+        
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  user.description \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endcall
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Filters\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Filter sections allow you to apply regular Jinja2 filters on a block of template data. Just wrap the code in the special 
+\i filter
+\i0  section:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 filter
+\f2\b0 \cf3  \cf13 upper\cf3  \cf6 %\}\cf3 \
+    This text becomes uppercase\
+\cf6 \{%\cf3  
+\f3\b \cf10 endfilter
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Assignments\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Inside code blocks you can also assign values to variables. Assignments at top level (outside of blocks, macros or loops) are exported from the template like top level macros and can be imported by other templates.\
+Assignments use the 
+\i set
+\i0  tag and can have multiple targets:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  navigation = [(\cf9 'index.html'\cf3 , \cf9 'Index'\cf3 ), (\cf9 'about.html'\cf3 , \cf9 'About'\cf3 )] \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  key, value = call_something() \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Extends\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The 
+\i extends
+\i0  tag can be used to extend a template from another one. You can have multiple of them in a file but only one of them may be executed at the time. See the section about 
+\i \cf12 Template Inheritance
+\i0 \cf3  above.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Block\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Blocks are used for inheritance and act as placeholders and replacements at the same time. They are documented in detail as part of the section about 
+\i \cf12 Template Inheritance
+\i0 \cf3 .\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Include\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The 
+\i include
+\i0  statement is useful to include a template and return the rendered contents of that file into the current namespace:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 'header.html'\cf3  \cf6 %\}\cf3 \
+    Body\
+\cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 'footer.html'\cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Included templates have access to the variables of the active context by default. For more details about context behavior of imports and includes see 
+\i \cf12 Import Context Behavior
+\i0 \cf3 .\
+From Jinja 2.2 onwards you can mark an include with 
+\f2\fs28 \cf4 \cb5 ignore missing
+\f1\fs34 \cf3 \cb1  in which case Jinja will ignore the statement if the template to be included does not exist. When combined with 
+\f2\fs28 \cf4 \cb5 with
+\f1\fs34 \cf3 \cb1  or 
+\f2\fs28 \cf4 \cb5 without context
+\f1\fs34 \cf3 \cb1  it has to be placed 
+\i before
+\i0  the context visibility statement. Here some valid examples:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 "sidebar.html"\cf3  
+\f3\b \cf10 ignore missing
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 "sidebar.html"\cf3  
+\f3\b \cf10 ignore missing
+\f2\b0 \cf3  
+\f3\b \cf10 with context
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 "sidebar.html"\cf3  
+\f3\b \cf10 ignore missing
+\f2\b0 \cf3  
+\f3\b \cf10 without context
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.2.
+\i0 \
+You can also provide a list of templates that are checked for existence before inclusion. The first template that exists will be included. If 
+\i ignore missing
+\i0  is given, it will fall back to rendering nothing if none of the templates exist, otherwise it will raise an exception.\
+Example:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  [\cf9 'page_detailed.html'\cf3 , \cf9 'page.html'\cf3 ] \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  [\cf9 'special_sidebar.html'\cf3 , \cf9 'sidebar.html'\cf3 ] 
+\f3\b \cf10 ignore missing
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 Changed in version 2.4: 
+\i0 If a template object was passed to the template context you can include that object using 
+\i include
+\i0 .\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Import\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Jinja2 supports putting often used code into macros. These macros can go into different templates and get imported from there. This works similar to the import statements in Python. It\'92s important to know that imports are cached and imported templates don\'92t have access to the current template variables, just the globals by default. For more details about context behavior of imports and includes see 
+\i \cf12 Import Context Behavior
+\i0 \cf3 .\
+There are two ways to import templates. You can import the complete template into a variable or request specific macros / exported variables from it.\
+Imagine we have a helper module that renders forms (called 
+\i forms.html
+\i0 ):\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 macro
+\f2\b0 \cf3  input(name, value=\cf9 ''\cf3 , type=\cf9 'text'\cf3 ) -\cf6 %\}\cf3 \
+    
+\f3\b \cf8 <input
+\f2\b0 \cf3  \cf8 type=\cf9 "\cf6 \{\{\cf3  type \cf6 \}\}\cf9 "\cf3  \cf8 value=\cf9 "\cf6 \{\{\cf3  value|\cf13 e\cf3  \cf6 \}\}\cf9 "\cf3  \cf8 name=\cf9 "\cf6 \{\{\cf3  name \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endmacro
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\
+\cf6 \{%\cf3 - 
+\f3\b \cf10 macro
+\f2\b0 \cf3  textarea(name, value=\cf9 ''\cf3 , rows=\cf14 10\cf3 , cols=\cf14 40\cf3 ) -\cf6 %\}\cf3 \
+    
+\f3\b \cf8 <textarea
+\f2\b0 \cf3  \cf8 name=\cf9 "\cf6 \{\{\cf3  name \cf6 \}\}\cf9 "\cf3  \cf8 rows=\cf9 "\cf6 \{\{\cf3  rows \cf6 \}\}\cf9 "\cf3  \cf8 cols=\cf9 "\cf6 \{\{\cf3  cols\
+        \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  value|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </textarea>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endmacro
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The easiest and most flexible is importing the whole module into a variable. That way you can access the attributes:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 import
+\f2\b0 \cf3  \cf9 'forms.html'\cf3  
+\f3\b \cf10 as
+\f2\b0 \cf3  forms \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <dl>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dt>
+\f2\b0 \cf3 Username
+\f3\b \cf8 </dt>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  forms.input(\cf9 'username'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dt>
+\f2\b0 \cf3 Password
+\f3\b \cf8 </dt>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  forms.input(\cf9 'password'\cf3 , type=\cf9 'password'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <p>
+\f2\b0 \cf6 \{\{\cf3  forms.textarea(\cf9 'comment'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Alternatively you can import names from the template into the current namespace:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 from
+\f2\b0 \cf3  \cf9 'forms.html'\cf3  
+\f3\b \cf10 import
+\f2\b0 \cf3  input 
+\f3\b \cf10 as
+\f2\b0 \cf3  input_field, textarea \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <dl>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dt>
+\f2\b0 \cf3 Username
+\f3\b \cf8 </dt>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  input_field(\cf9 'username'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dt>
+\f2\b0 \cf3 Password
+\f3\b \cf8 </dt>
+\f2\b0 \cf3 \
+    
+\f3\b \cf8 <dd>
+\f2\b0 \cf6 \{\{\cf3  input_field(\cf9 'password'\cf3 , type=\cf9 'password'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </dd>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 </dl>
+\f2\b0 \cf3 \
+
+\f3\b \cf8 <p>
+\f2\b0 \cf6 \{\{\cf3  textarea(\cf9 'comment'\cf3 ) \cf6 \}\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Macros and variables starting with one or more underscores are private and cannot be imported.\
+\pard\pardeftab720\sa340
+
+\i \cf3 Changed in version 2.4: 
+\i0 If a template object was passed to the template context you can import from that object.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Import Context Behavior\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Per default included templates are passed the current context and imported templates not. The reason for this is that imports unlike includes are cached as imports are often used just as a module that holds macros.\
+This however can be changed of course explicitly. By adding 
+\i with context
+\i0  or 
+\i without context
+\i0  to the import/include directive the current context can be passed to the template and caching is disabled automatically.\
+Here two examples:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 from
+\f2\b0 \cf3  \cf9 'forms.html'\cf3  
+\f3\b \cf10 import
+\f2\b0 \cf3  input 
+\f3\b \cf10 with context
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 'header.html'\cf3  
+\f3\b \cf10 without context
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f1\fs48 \cf3 \cb11 Note
+\fs34 \
+In Jinja 2.0 the context that was passed to the included template did not include variables defined in the template. As a matter of fact this did not work:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  box 
+\f3\b \cf10 in
+\f2\b0 \cf3  boxes \cf6 %\}\cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 include
+\f2\b0 \cf3  \cf9 "render_box.html"\cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f1\fs34 \cf3 \cb11 The included template 
+\f2\fs28 \cf4 \cb5 render_box.html
+\f1\fs34 \cf3 \cb11  is 
+\i not
+\i0  able to access 
+\i box
+\i0  in Jinja 2.0. As of Jinja 2.1 
+\f2\fs28 \cf4 \cb5 render_box.html
+\f1\fs34 \cf3 \cb11  
+\i is
+\i0  able to do so.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Expressions\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Jinja allows basic expressions everywhere. These work very similar to regular Python and even if you\'92re not working with Python you should feel comfortable with it.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Literals\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The simplest form of expressions are literals. Literals are representations for Python objects such as strings and numbers. The following literals exist:\
+\pard\pardeftab720
+\cf3 \'93Hello World\'94:\
+Everything between two double or single quotes is a string. They are useful whenever you need a string in the template (for example as arguments to function calls, filters or just to extend or include a template).\
+42 / 42.23:\
+Integers and floating point numbers are created by just writing the number down. If a dot is present the number is a float, otherwise an integer. Keep in mind that for Python 
+\f2\fs28 \cf4 \cb5 42
+\f1\fs34 \cf3 \cb1  and 
+\f2\fs28 \cf4 \cb5 42.0
+\f1\fs34 \cf3 \cb1  is something different.\
+[\'91list\'92, \'91of\'92, \'91objects\'92]:\
+\pard\pardeftab720\sa340
+\cf3 Everything between two brackets is a list. Lists are useful to store sequential data in or to iterate over them. For example you can easily create a list of links using lists and tuples with a for loop:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  href, caption 
+\f3\b \cf10 in
+\f2\b0 \cf3  [(\cf9 'index.html'\cf3 , \cf9 'Index'\cf3 ), (\cf9 'about.html'\cf3 , \cf9 'About'\cf3 ),\
+                         (\cf9 'downloads.html'\cf3 , \cf9 'Downloads'\cf3 )] \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li><a
+\f2\b0 \cf3  \cf8 href=\cf9 "\cf6 \{\{\cf3  href \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  caption \cf6 \}\}
+\f3\b \cf8 </a></li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+
+\f1\fs34 \cf3 \cb1 (\'91tuple\'92, \'91of\'92, \'91values\'92):\
+Tuples are like lists, just that you can\'92t modify them. If the tuple only has one item you have to end it with a comma. Tuples are usually used to represent items of two or more elements. See the example above for more details.\
+\{\'91dict\'92: \'91of\'92, \'91key\'92: \'91and\'92, \'91value\'92: \'91pairs\'92\}:\
+A dict in Python is a structure that combines keys and values. Keys must be unique and always have exactly one value. Dicts are rarely used in templates, they are useful in some rare cases such as the 
+\f3\b\fs28 \cf4 \cb5 xmlattr()
+\f1\b0\fs34 \cf3 \cb1  filter.\
+true / false:\
+true is always true and false is always false.\
+\pard\pardeftab720
+
+\fs48 \cf3 \cb11 Note
+\fs34 \
+The special constants 
+\i true
+\i0 , 
+\i false
+\i0  and 
+\i none
+\i0  are indeed lowercase. Because that caused confusion in the past, when writing 
+\i True
+\i0  expands to an undefined variable that is considered false, all three of them can be written in title case too (
+\i True
+\i0 , 
+\i False
+\i0 , and 
+\i None
+\i0 ). However for consistency (all Jinja identifiers are lowercase) you should use the lowercase versions.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Math\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 Jinja allows you to calculate with values. This is rarely useful in templates but exists for completeness\'92 sake. The following operators are supported:\
+\pard\pardeftab720
+\cf3 +\
+Adds two objects together. Usually the objects are numbers but if both are strings or lists you can concatenate them this way. This however is not the preferred way to concatenate strings! For string concatenation have a look at the 
+\f2\fs28 \cf4 \cb5 ~
+\f1\fs34 \cf3 \cb1  operator. 
+\f2\fs28 \cf4 \cb5 \{\{ 1 + 1 \}\}
+\f1\fs34 \cf3 \cb1  is 
+\f2\fs28 \cf4 \cb5 2
+\f1\fs34 \cf3 \cb1 .\
+-\
+Substract the second number from the first one. 
+\f2\fs28 \cf4 \cb5 \{\{ 3 - 2 \}\}
+\f1\fs34 \cf3 \cb1  is 
+\f2\fs28 \cf4 \cb5 1
+\f1\fs34 \cf3 \cb1 .\
+/\
+Divide two numbers. The return value will be a floating point number. 
+\f2\fs28 \cf4 \cb5 \{\{ 1 / 2 \}\}
+\f1\fs34 \cf3 \cb1  is 
+\f2\fs28 \cf4 \cb5 \{\{ 0.5 \}\}
+\f1\fs34 \cf3 \cb1 .\
+//\
+Divide two numbers and return the truncated integer result. 
+\f2\fs28 \cf4 \cb5 \{\{ 20 // 7 \}\}
+\f1\fs34 \cf3 \cb1  is 
+\f2\fs28 \cf4 \cb5 2
+\f1\fs34 \cf3 \cb1 .\
+%\
+Calculate the remainder of an integer division. 
+\f2\fs28 \cf4 \cb5 \{\{ 11 % 7 \}\}
+\f1\fs34 \cf3 \cb1  is 
+\f2\fs28 \cf4 \cb5 4
+\f1\fs34 \cf3 \cb1 .\
+*\
+Multiply the left operand with the right one. 
+\f2\fs28 \cf4 \cb5 \{\{ 2 * 2 \}\}
+\f1\fs34 \cf3 \cb1  would return 
+\f2\fs28 \cf4 \cb5 4
+\f1\fs34 \cf3 \cb1 . This can also be used to repeat a string multiple times. 
+\f2\fs28 \cf4 \cb5 \{\{ '=' * 80 \}\}
+\f1\fs34 \cf3 \cb1  would print a bar of 80 equal signs.\
+**\
+Raise the left operand to the power of the right operand. 
+\f2\fs28 \cf4 \cb5 \{\{ 2**3 \}\}
+\f1\fs34 \cf3 \cb1  would return 
+\f2\fs28 \cf4 \cb5 8
+\f1\fs34 \cf3 \cb1 .\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Comparisons\cf2 \'b6\cf0 \
+\pard\pardeftab720
+
+\f1\fs34 \cf3 ==\
+Compares two objects for equality.\
+!=\
+Compares two objects for inequality.\
+>\
+
+\i true
+\i0  if the left hand side is greater than the right hand side.\
+>=\
+
+\i true
+\i0  if the left hand side is greater or equal to the right hand side.\
+<\
+
+\i true
+\i0  if the left hand side is lower than the right hand side.\
+<=\
+
+\i true
+\i0  if the left hand side is lower or equal to the right hand side.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Logic\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 For 
+\i if
+\i0  statements, 
+\i for
+\i0  filtering or 
+\i if
+\i0  expressions it can be useful to combine multiple expressions:\
+\pard\pardeftab720
+\cf3 and\
+Return true if the left and the right operand is true.\
+or\
+Return true if the left or the right operand is true.\
+not\
+negate a statement (see below).\
+(expr)\
+group an expression.\
+\pard\pardeftab720
+
+\fs48 \cf3 \cb11 Note
+\fs34 \
+The 
+\f2\fs28 \cf4 \cb5 is
+\f1\fs34 \cf3 \cb11  and 
+\f2\fs28 \cf4 \cb5 in
+\f1\fs34 \cf3 \cb11  operators support negation using an infix notation too: 
+\f2\fs28 \cf4 \cb5 foo is not bar
+\f1\fs34 \cf3 \cb11  and 
+\f2\fs28 \cf4 \cb5 foo not in bar
+\f1\fs34 \cf3 \cb11  instead of 
+\f2\fs28 \cf4 \cb5 not foo is bar
+\f1\fs34 \cf3 \cb11  and 
+\f2\fs28 \cf4 \cb5 not foo in bar
+\f1\fs34 \cf3 \cb11 . All other expressions require a prefix notation: 
+\f2\fs28 \cf4 \cb5 not (foo and bar).
+\f1\fs34 \cf3 \cb11 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Other Operators\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The following operators are very useful but don\'92t fit into any of the other two categories:\
+\pard\pardeftab720
+\cf3 in\
+Perform sequence / mapping containment test. Returns true if the left operand is contained in the right. 
+\f2\fs28 \cf4 \cb5 \{\{ 1 in [1, 2, 3] \}\}
+\f1\fs34 \cf3 \cb1  would for example return true.\
+is\
+Performs a 
+\i \cf12 test
+\i0 \cf3 .\
+|\
+Applies a 
+\i \cf12 filter
+\i0 \cf3 .\
+~\
+Converts all operands into strings and concatenates them. 
+\f2\fs28 \cf4 \cb5 \{\{ "Hello " ~ name ~ "!" \}\}
+\f1\fs34 \cf3 \cb1  would return (assuming 
+\i name
+\i0  is 
+\f2\fs28 \cf4 \cb5 'John'
+\f1\fs34 \cf3 \cb1 ) 
+\f2\fs28 \cf4 \cb5 Hello John!
+\f1\fs34 \cf3 \cb1 .\
+()\
+Call a callable: 
+\f2\fs28 \cf4 \cb5 \{\{ post.render() \}\}
+\f1\fs34 \cf3 \cb1 . Inside of the parentheses you can use positional arguments and keyword arguments like in python: 
+\f2\fs28 \cf4 \cb5 \{\{ post.render(user, full=true) \}\}
+\f1\fs34 \cf3 \cb1 .\
+. / []\
+Get an attribute of an object. (See 
+\i \cf12 Variables
+\i0 \cf3 )\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 If Expression\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 It is also possible to use inline 
+\i if
+\i0  expressions. These are useful in some situations. For example you can use this to extend from one template if a variable is defined, otherwise from the default layout template:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 extends
+\f2\b0 \cf3  layout_template 
+\f3\b \cf10 if
+\f2\b0 \cf3  layout_template 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 defined\cf3  
+\f3\b \cf10 else
+\f2\b0 \cf3  \cf9 'master.html'\cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 The general syntax is 
+\f2\fs28 \cf4 \cb5 <do something> if <something is true> else <do something else>
+\f1\fs34 \cf3 \cb1 .\
+The 
+\i else
+\i0  part is optional. If not provided the else block implicitly evaluates into an undefined object:\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 \{\{ '[%s]' % page.title if page.title \}\}\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 List of Builtin Filters\cf2 \'b6\cf0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 abs
+\f1\b0\fs40 \cf3 (
+\i\fs34 number
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return the absolute value of the argument.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 attr
+\f1\b0\fs40 \cf3 (
+\i\fs34 obj
+\i0 , 
+\i name
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Get an attribute of an object. 
+\f2\fs28 \cf4 \cb5 foo|attr("bar")
+\f1\fs34 \cf3 \cb1  works like 
+\f2\fs28 \cf4 \cb5 foo["bar"]
+\f1\fs34 \cf3 \cb1  just that always an attribute is returned and items are not looked up.\
+See 
+\i \cf12 Notes on subscriptions
+\i0 \cf3  for more details.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 batch
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i linecount
+\i0 , 
+\i fill_with=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 A filter that batches items. It works pretty much like 
+\i slice
+\i0  just the other way round. It returns a list of lists with the given number of items. If you provide a second parameter this is used to fill up missing items. See this example:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <table>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  row 
+\f3\b \cf10 in
+\f2\b0 \cf3  items|\cf13 batch\cf3 (\cf14 3\cf3 , \cf9 '&nbsp;'\cf3 ) \cf6 %\}\cf3 \
+  
+\f3\b \cf8 <tr>
+\f2\b0 \cf3 \
+  \cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  column 
+\f3\b \cf10 in
+\f2\b0 \cf3  row \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <td>
+\f2\b0 \cf6 \{\{\cf3  column \cf6 \}\}
+\f3\b \cf8 </td>
+\f2\b0 \cf3 \
+  \cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+  
+\f3\b \cf8 </tr>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </table>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 capitalize
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Capitalize a value. The first character will be uppercase, all others lowercase.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 center
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i width=80
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Centers the value in a field of a given width.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 default
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i default_value=u''
+\i0 , 
+\i boolean=False
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 If the value is undefined it will return the passed default value, otherwise the value of the variable:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  my_variable|\cf13 default\cf3 (\cf9 'my_variable is not defined'\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 This will output the value of 
+\f2\fs28 \cf4 \cb5 my_variable
+\f1\fs34 \cf3 \cb1  if the variable was defined, otherwise 
+\f2\fs28 \cf4 \cb5 'my_variable is not defined'
+\f1\fs34 \cf3 \cb1 . If you want to use default with variables that evaluate to false you have to set the second parameter to 
+\i true
+\i0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf9 ''\cf3 |\cf13 default\cf3 (\cf9 'the string was empty'\cf3 , 
+\f3\b \cf10 true
+\f2\b0 \cf3 ) \cf6 \}\}\cf3 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \tamarb200 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1380\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr260 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth160\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr0 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\f1\b\fs34 \cf3 \cb1 Aliases:\cell 
+\pard\intbl\itap1\pardeftab720
+
+\f2\b0\fs28 \cf4 \cb5 d
+\f1\fs34 \cf3 \cb1 \cell \lastrow\row
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 dictsort
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i case_sensitive=False
+\i0 , 
+\i by='key'
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Sort a dict and yield (key, value) pairs. Because python dicts are unsorted you may want to use this function to order them by either key or value:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  mydict|\cf13 dictsort\cf3  \cf6 %\}\cf3 \
+    sort the dict by key, case insensitive\
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  mydict|\cf13 dictsort\cf3 (
+\f3\b \cf10 true
+\f2\b0 \cf3 ) \cf6 %\}\cf3 \
+    sort the dict by key, case sensitive\
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  mydict|\cf13 dictsort\cf3 (
+\f3\b \cf10 false
+\f2\b0 \cf3 , \cf9 'value'\cf3 ) \cf6 %\}\cf3 \
+    sort the dict by key, case insensitive, sorted\
+    normally and ordered by value.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 escape
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert the characters &, <, >, \'91, and \'94 in string s to HTML-safe sequences. Use this if you need to display text that might contain such characters in HTML. Marks return value as markup string.\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \tamarb200 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1380\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr260 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth160\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr0 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\b \cf3 Aliases:\cell 
+\pard\intbl\itap1\pardeftab720
+
+\f2\b0\fs28 \cf4 \cb5 e
+\f1\fs34 \cf3 \cb1 \cell \lastrow\row
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 filesizeformat
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i binary=False
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Format the value like a \'91human-readable\'92 file size (i.e. 13 kB, 4.1 MB, 102 Bytes, etc). Per default decimal prefixes are used (Mega, Giga, etc.), if the second parameter is set to 
+\i True
+\i0  the binary prefixes are used (Mebi, Gibi).\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 first
+\f1\b0\fs40 \cf3 (
+\i\fs34 seq
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return the first item of a sequence.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 float
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i default=0.0
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert the value into a floating point number. If the conversion doesn\'92t work it will return 
+\f2\fs28 \cf4 \cb5 0.0
+\f1\fs34 \cf3 \cb1 . You can override this default using the first parameter.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 forceescape
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Enforce HTML escaping. This will probably double escape variables.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 format
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i *args
+\i0 , 
+\i **kwargs
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Apply python string formatting on an object:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf9 "%s - %s"\cf3 |\cf13 format\cf3 (\cf9 "Hello?"\cf3 , \cf9 "Foo!"\cf3 ) \cf6 \}\}\cf3 \
+    -> Hello? - Foo!\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 groupby
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i attribute
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Group a sequence of objects by a common attribute.\
+If you for example have a list of dicts or objects that represent persons with 
+\i gender
+\i0 , 
+\i first_name
+\i0  and 
+\i last_name
+\i0  attributes and you want to group all users by genders you can do something like the following snippet:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  group 
+\f3\b \cf10 in
+\f2\b0 \cf3  persons|\cf13 groupby\cf3 (\cf9 'gender'\cf3 ) \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  group.grouper \cf6 \}\}
+\f3\b \cf8 <ul>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  person 
+\f3\b \cf10 in
+\f2\b0 \cf3  group.list \cf6 %\}\cf3 \
+        
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  person.first_name \cf6 \}\}\cf3  \cf6 \{\{\cf3  person.last_name \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </ul></li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Additionally it\'92s possible to use tuple unpacking for the grouper and list:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  grouper, list 
+\f3\b \cf10 in
+\f2\b0 \cf3  persons|\cf13 groupby\cf3 (\cf9 'gender'\cf3 ) \cf6 %\}\cf3 \
+    ...\
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 As you can see the item we\'92re grouping by is stored in the 
+\i grouper
+\i0  attribute and the 
+\i list
+\i0  contains all the objects that have this grouper in common.\
+\pard\pardeftab720\sa340
+
+\i \cf3 Changed in version 2.6: 
+\i0 It\'92s now possible to use dotted notation to group by the child attribute of another attribute.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 indent
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0 , 
+\i width=4
+\i0 , 
+\i indentfirst=False
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a copy of the passed string, each line indented by 4 spaces. The first line is not indented. If you want to change the number of spaces or indent the first line too you can pass additional parameters to the filter:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  mytext|\cf13 indent\cf3 (\cf14 2\cf3 , 
+\f3\b \cf10 true
+\f2\b0 \cf3 ) \cf6 \}\}\cf3 \
+    indent by two spaces and indent the first line too.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 int
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i default=0
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert the value into an integer. If the conversion doesn\'92t work it will return 
+\f2\fs28 \cf4 \cb5 0
+\f1\fs34 \cf3 \cb1 . You can override this default using the first parameter.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 join
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i d=u''
+\i0 , 
+\i attribute=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a string which is the concatenation of the strings in the sequence. The separator between elements is an empty string per default, you can define it with the optional parameter:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  [\cf14 1\cf3 , \cf14 2\cf3 , \cf14 3\cf3 ]|\cf13 join\cf3 (\cf9 '|'\cf3 ) \cf6 \}\}\cf3 \
+    -> 1|2|3\
+\
+\cf6 \{\{\cf3  [\cf14 1\cf3 , \cf14 2\cf3 , \cf14 3\cf3 ]|\cf13 join\cf3  \cf6 \}\}\cf3 \
+    -> 123\
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 It is also possible to join certain attributes of an object:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  users|\cf13 join\cf3 (\cf9 ', '\cf3 , attribute=\cf9 'username'\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.6: 
+\i0 The 
+\i attribute
+\i0  parameter was added.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 last
+\f1\b0\fs40 \cf3 (
+\i\fs34 seq
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return the last item of a sequence.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 length
+\f1\b0\fs40 \cf3 (
+\i\fs34 object
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return the number of items of a sequence or mapping.\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \tamarb200 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalt \clshdrawnil \clwWidth1380\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr260 \gaph\cellx4320
+\clvertalt \clshdrawnil \clwWidth800\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadl0 \clpadr0 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720
+
+\b \cf3 Aliases:\cell 
+\pard\intbl\itap1\pardeftab720
+
+\f2\b0\fs28 \cf4 \cb5 count
+\f1\fs34 \cf3 \cb1 \cell \lastrow\row
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 list
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert the value into a list. If it was a string the returned list will be a list of characters.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 lower
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert a value to lowercase.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 map
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Applies a filter on a sequence of objects or looks up an attribute. This is useful when dealing with lists of objects but you are really only interested in a certain value of it.\
+The basic usage is mapping on an attribute. Imagine you have a list of users but you are only interested in a list of usernames:\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 Users on this page: \cf6 \{\{\cf3  users|\cf13 map\cf3 (attribute=\cf9 'username'\cf3 )|\cf13 join\cf3 (\cf9 ', '\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Alternatively you can let it invoke a filter by passing the name of the filter and the arguments afterwards. A good example would be applying a text conversion filter on a sequence:\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 Users on this page: \cf6 \{\{\cf3  titles|\cf13 map\cf3 (\cf9 'lower'\cf3 )|\cf13 join\cf3 (\cf9 ', '\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 pprint
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i verbose=False
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Pretty print a variable. Useful for debugging.\
+With Jinja 1.2 onwards you can pass it a parameter. If this parameter is truthy the output will be more verbose (this requires 
+\i pretty
+\i0 )\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 random
+\f1\b0\fs40 \cf3 (
+\i\fs34 seq
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a random item from the sequence.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 reject
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Filters a sequence of objects by appying a test to the object and rejecting the ones with the test succeeding.\
+Example usage:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  numbers|\cf13 reject\cf3 (\cf9 "odd"\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 rejectattr
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Filters a sequence of objects by appying a test to an attribute of an object or the attribute and rejecting the ones with the test succeeding.\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  users|\cf13 rejectattr\cf3 (\cf9 "is_active"\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  users|\cf13 rejectattr\cf3 (\cf9 "email"\cf3 , \cf9 "none"\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 replace
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0 , 
+\i old
+\i0 , 
+\i new
+\i0 , 
+\i count=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a copy of the value with all occurrences of a substring replaced with a new one. The first argument is the substring that should be replaced, the second is the replacement string. If the optional third argument 
+\f2\fs28 \cf4 \cb5 count
+\f1\fs34 \cf3 \cb1  is given, only the first 
+\f2\fs28 \cf4 \cb5 count
+\f1\fs34 \cf3 \cb1  occurrences are replaced:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf9 "Hello World"\cf3 |\cf13 replace\cf3 (\cf9 "Hello"\cf3 , \cf9 "Goodbye"\cf3 ) \cf6 \}\}\cf3 \
+    -> Goodbye World\
+\
+\cf6 \{\{\cf3  \cf9 "aaaaargh"\cf3 |\cf13 replace\cf3 (\cf9 "a"\cf3 , \cf9 "d'oh, "\cf3 , \cf14 2\cf3 ) \cf6 \}\}\cf3 \
+    -> d'oh, d'oh, aaargh\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 reverse
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Reverse the object or return an iterator the iterates over it the other way round.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 round
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i precision=0
+\i0 , 
+\i method='common'
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Round the number to a given precision. The first parameter specifies the precision (default is 
+\f2\fs28 \cf4 \cb5 0
+\f1\fs34 \cf3 \cb1 ), the second the rounding method:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls4\ilvl0
+\f2\fs28 \cf4 \cb5 {\listtext	\'95	}'common'
+\f1\fs34 \cf3 \cb1  rounds either up or down\
+\ls4\ilvl0
+\f2\fs28 \cf4 \cb5 {\listtext	\'95	}'ceil'
+\f1\fs34 \cf3 \cb1  always rounds up\
+\ls4\ilvl0
+\f2\fs28 \cf4 \cb5 {\listtext	\'95	}'floor'
+\f1\fs34 \cf3 \cb1  always rounds down\
+\pard\pardeftab720\sa340
+\cf3 If you don\'92t specify a method 
+\f2\fs28 \cf4 \cb5 'common'
+\f1\fs34 \cf3 \cb1  is used.\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf14 42.55\cf3 |\cf13 round\cf3  \cf6 \}\}\cf3 \
+    -> 43.0\
+\cf6 \{\{\cf3  \cf14 42.55\cf3 |\cf13 round\cf3 (\cf14 1\cf3 , \cf9 'floor'\cf3 ) \cf6 \}\}\cf3 \
+    -> 42.5\
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Note that even if rounded to 0 precision, a float is returned. If you need a real integer, pipe it through 
+\i int
+\i0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf14 42.55\cf3 |\cf13 round\cf3 |\cf13 int\cf3  \cf6 \}\}\cf3 \
+    -> 43\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 safe
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Mark the value as safe which means that in an environment with automatic escaping enabled this variable will not be escaped.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 select
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Filters a sequence of objects by appying a test to the object and only selecting the ones with the test succeeding.\
+Example usage:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  numbers|\cf13 select\cf3 (\cf9 "odd"\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  numbers|\cf13 select\cf3 (\cf9 "odd"\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 selectattr
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Filters a sequence of objects by appying a test to an attribute of an object and only selecting the ones with the test succeeding.\
+Example usage:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  users|\cf13 selectattr\cf3 (\cf9 "is_active"\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  users|\cf13 selectattr\cf3 (\cf9 "email"\cf3 , \cf9 "none"\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 slice
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i slices
+\i0 , 
+\i fill_with=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Slice an iterator and return a list of lists containing those items. Useful if you want to create a div containing three ul tags that represent columns:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <div
+\f2\b0 \cf3  \cf8 class=\cf9 "columwrapper"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+  \cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  column 
+\f3\b \cf10 in
+\f2\b0 \cf3  items|\cf13 slice\cf3 (\cf14 3\cf3 ) \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <ul
+\f2\b0 \cf3  \cf8 class=\cf9 "column-\cf6 \{\{\cf3  \cf13 loop\cf3 .index \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  column \cf6 %\}\cf3 \
+      
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  item \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+  \cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+
+\f3\b \cf8 </div>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 If you pass it a second argument it\'92s used to fill missing values on the last iteration.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 sort
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i reverse=False
+\i0 , 
+\i case_sensitive=False
+\i0 , 
+\i attribute=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Sort an iterable. Per default it sorts ascending, if you pass it true as first argument it will reverse the sorting.\
+If the iterable is made of strings the third parameter can be used to control the case sensitiveness of the comparison which is disabled by default.\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  iterable|\cf13 sort\cf3  \cf6 %\}\cf3 \
+    ...\
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 It is also possible to sort by an attribute (for example to sort by the date of an object) by specifying the 
+\i attribute
+\i0  parameter:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  item 
+\f3\b \cf10 in
+\f2\b0 \cf3  iterable|\cf13 sort\cf3 (attribute=\cf9 'date'\cf3 ) \cf6 %\}\cf3 \
+    ...\
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 Changed in version 2.6: 
+\i0 The 
+\i attribute
+\i0  parameter was added.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 string
+\f1\b0\fs40 \cf3 (
+\i\fs34 object
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Make a string unicode if it isn\'92t already. That way a markup string is not converted back to unicode.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 striptags
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Strip SGML/XML tags and replace adjacent whitespace by one space.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 sum
+\f1\b0\fs40 \cf3 (
+\i\fs34 iterable
+\i0 , 
+\i attribute=None
+\i0 , 
+\i start=0
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Returns the sum of a sequence of numbers plus the value of parameter \'91start\'92 (which defaults to 0). When the sequence is empty it returns start.\
+It is also possible to sum up only certain attributes:\
+\pard\pardeftab720
+
+\f2\fs28 \cf3 \cb7 Total: \cf6 \{\{\cf3  items|\cf13 sum\cf3 (attribute=\cf9 'price'\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 Changed in version 2.6: 
+\i0 The 
+\i attribute
+\i0  parameter was added to allow suming up over attributes. Also the 
+\i start
+\i0  parameter was moved on to the right.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 title
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a titlecased version of the value. I.e. words will start with uppercase letters, all remaining characters are lowercase.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 trim
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Strip leading and trailing whitespace.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 truncate
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0 , 
+\i length=255
+\i0 , 
+\i killwords=False
+\i0 , 
+\i end='...'
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a truncated copy of the string. The length is specified with the first parameter which defaults to 
+\f2\fs28 \cf4 \cb5 255
+\f1\fs34 \cf3 \cb1 . If the second parameter is 
+\f2\fs28 \cf4 \cb5 true
+\f1\fs34 \cf3 \cb1  the filter will cut the text at length. Otherwise it will discard the last word. If the text was in fact truncated it will append an ellipsis sign (
+\f2\fs28 \cf4 \cb5 "..."
+\f1\fs34 \cf3 \cb1 ). If you want a different ellipsis sign than 
+\f2\fs28 \cf4 \cb5 "..."
+\f1\fs34 \cf3 \cb1  you can specify it using the third parameter.\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  \cf9 "foo bar baz"\cf3 |\cf13 truncate\cf3 (\cf14 9\cf3 ) \cf6 \}\}\cf3 \
+    -> "foo ba..."\
+\cf6 \{\{\cf3  \cf9 "foo bar baz"\cf3 |\cf13 truncate\cf3 (\cf14 9\cf3 , 
+\f3\b \cf10 True
+\f2\b0 \cf3 ) \cf6 \}\}\cf3 \
+    -> "foo ..."\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 upper
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Convert a value to uppercase.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 urlencode
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Escape strings for use in URLs (uses UTF-8 encoding). It accepts both dictionaries and regular strings as well as pairwise iterables.\
+\pard\pardeftab720\sa340
+
+\i \cf3 New in version 2.7.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 urlize
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i trim_url_limit=None
+\i0 , 
+\i nofollow=False
+\i0 , 
+\i target=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Converts URLs in plain text into clickable links.\
+If you pass the filter an additional integer it will shorten the urls to that number. Also a third argument exists that makes the urls \'93nofollow\'94:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  mytext|\cf13 urlize\cf3 (\cf14 40\cf3 , 
+\f3\b \cf10 true
+\f2\b0 \cf3 ) \cf6 \}\}\cf3 \
+    links are shortened to 40 chars and defined with rel="nofollow"\
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 If 
+\i target
+\i0  is specified, the 
+\f2\fs28 \cf4 \cb5 target
+\f1\fs34 \cf3 \cb1  attribute will be added to the 
+\f2\fs28 \cf4 \cb5 <a>
+\f1\fs34 \cf3 \cb1  tag:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  mytext|\cf13 urlize\cf3 (\cf14 40\cf3 , target=\cf9 '_blank'\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 \cb1 Changed in version 2.8+: 
+\i0 The 
+\i target
+\i0  parameter was added.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 wordcount
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Count the words in that string.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 wordwrap
+\f1\b0\fs40 \cf3 (
+\i\fs34 s
+\i0 , 
+\i width=79
+\i0 , 
+\i break_long_words=True
+\i0 , 
+\i wrapstring=None
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a copy of the string passed to the filter wrapped after 
+\f2\fs28 \cf4 \cb5 79
+\f1\fs34 \cf3 \cb1  characters. You can override this default using the first parameter. If you set the second parameter to 
+\i false
+\i0  Jinja will not split words apart if they are longer than 
+\i width
+\i0 . By default, the newlines will be the default newlines for the environment, but this can be changed using the wrapstring keyword argument.\
+\pard\pardeftab720\sa340
+
+\i \cf3 New in version 2.7: 
+\i0 Added support for the 
+\i wrapstring
+\i0  parameter.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 xmlattr
+\f1\b0\fs40 \cf3 (
+\i\fs34 d
+\i0 , 
+\i autospace=True
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Create an SGML/XML attribute string based on the items in a dict. All values that are neither 
+\i none
+\i0  nor 
+\i undefined
+\i0  are automatically escaped:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul
+\f2\b0 \cf6 \{\{\cf3  \{\cf9 'class'\cf3 : \cf9 'my_list'\cf3 , \cf9 'missing'\cf3 : 
+\f3\b \cf10 none
+\f2\b0 \cf3 ,\
+        \cf9 'id'\cf3 : \cf9 'list-%d'\cf3 |\cf13 format\cf3 (variable)\}|\cf13 xmlattr\cf3  \cf6 \}\}
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+...\
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Results in something like this:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul
+\f2\b0 \cf3  \cf8 class=\cf9 "my_list"\cf3  \cf8 id=\cf9 "list-42"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+...\
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 As you can see it automatically prepends a space in front of the item if the filter returned something unless the second parameter is false.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 List of Builtin Tests\cf2 \'b6\cf0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 callable
+\f1\b0\fs40 \cf3 (
+\i\fs34 object
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return whether the object is callable (i.e., some kind of function). Note that classes are callable, as are instances with a __call__() method.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 defined
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is defined:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  variable 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 defined\cf3  \cf6 %\}\cf3 \
+    value of variable: \cf6 \{\{\cf3  variable \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 else
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    variable is not defined\
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 See the 
+\f3\b\fs28 \cf4 \cb5 default()
+\f1\b0\fs34 \cf3 \cb1  filter for a simple way to set undefined variables.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 divisibleby
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i num
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Check if a variable is divisible by a number.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 equalto
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i other
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Check if an object has the same value as another object:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  foo.expression 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 equalto\cf3  \cf14 42\cf3  \cf6 %\}\cf3 \
+    the foo attribute evaluates to the constant 42\
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 This appears to be a useless test as it does exactly the same as the 
+\f2\fs28 \cf4 \cb5 ==
+\f1\fs34 \cf3 \cb1  operator, but it can be useful when used together with the 
+\i selectattr
+\i0  function:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  users|\cf13 selectattr\cf3 (\cf9 "email"\cf3 , \cf9 "equalto"\cf3 , \cf9 "foo@bar.invalid"\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 escaped
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Check if the value is escaped.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 even
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is even.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 iterable
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Check if it\'92s possible to iterate over an object.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 lower
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is lowercased.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 mapping
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the object is a mapping (dict etc.).\
+\pard\pardeftab720\sa340
+
+\i \cf3 New in version 2.6.
+\i0 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 none
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is none.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 number
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is a number.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 odd
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is odd.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 sameas
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0 , 
+\i other
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Check if an object points to the same memory address than another object:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  foo.attribute 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 sameas\cf3  
+\f3\b \cf10 false
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    the foo attribute really is the `False` singleton\
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 sequence
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is a sequence. Sequences are variables that are iterable.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 string
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the object is a string.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 undefined
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Like 
+\f3\b\fs28 \cf4 \cb5 defined()
+\f1\b0\fs34 \cf3 \cb1  but the other way round.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 upper
+\f1\b0\fs40 \cf3 (
+\i\fs34 value
+\i0\fs40 )
+\fs34 \
+\pard\pardeftab720\sa340
+\cf3 Return true if the variable is uppercased.\
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 List of Global Functions\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The following functions are available in the global scope by default:\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 range
+\f1\b0\fs40 \cf3 (
+\fs44 [
+\i\fs34 start
+\i0\fs44 ]
+\fs34 , 
+\i stop
+\i0\fs44 [
+\fs34 , 
+\i step
+\i0\fs44 ]
+\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Return a list containing an arithmetic progression of integers. range(i, j) returns [i, i+1, i+2, ..., j-1]; start (!) defaults to 0. When step is given, it specifies the increment (or decrement). For example, range(4) returns [0, 1, 2, 3]. The end point is omitted! These are exactly the valid indices for a list of 4 elements.\
+This is useful to repeat a template block multiple times for example to fill a list. Imagine you have 7 users in the list but you want to render three empty items to enforce a height with CSS:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li>
+\f2\b0 \cf6 \{\{\cf3  user.username \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  number 
+\f3\b \cf10 in
+\f2\b0 \cf3  range(\cf14 10\cf3  - users|\cf13 count\cf3 ) \cf6 %\}\cf3 \
+    
+\f3\b \cf8 <li
+\f2\b0 \cf3  \cf8 class=\cf9 "empty"
+\f3\b \cf8 ><span>
+\f2\b0 \cf3 ...
+\f3\b \cf8 </span></li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 \cb1 lipsum
+\f1\b0\fs40 \cf3 (
+\i\fs34 n=5
+\i0 , 
+\i html=True
+\i0 , 
+\i min=20
+\i0 , 
+\i max=100
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Generates some lorem ipsum for the template. Per default five paragraphs with HTML are generated each paragraph between 20 and 100 words. If html is disabled regular text is returned. This is useful to generate simple contents for layout testing.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 dict
+\f1\b0\fs40 \cf3 (
+\i\fs34 **items
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 A convenient alternative to dict literals. 
+\f2\fs28 \cf4 \cb5 \{'foo': 'bar'\}
+\f1\fs34 \cf3 \cb1  is the same as 
+\f2\fs28 \cf4 \cb5 dict(foo='bar')
+\f1\fs34 \cf3 \cb1 .\
+\pard\pardeftab720
+
+\i \cf3 class 
+\f3\i0\b\fs32 \cf4 cycler
+\f1\b0\fs40 \cf3 (
+\i\fs34 *items
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 The cycler allows you to cycle among values similar to how 
+\i loop.cycle
+\i0  works. Unlike 
+\i loop.cycle
+\i0  however you can use this cycler outside of loops or over multiple loops.\
+This is for example very useful if you want to show a list of folders and files, with the folders on top, but both in the same list with alternating row colors.\
+The following example shows how 
+\i cycler
+\i0  can be used:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  row_class = cycler(\cf9 'odd'\cf3 , \cf9 'even'\cf3 ) \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 <ul
+\f2\b0 \cf3  \cf8 class=\cf9 "browser"
+\f3\b \cf8 >
+\f2\b0 \cf3 \
+\pard\pardeftab720
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  folder 
+\f3\b \cf10 in
+\f2\b0 \cf3  folders \cf6 %\}\cf3 \
+  
+\f3\b \cf8 <li
+\f2\b0 \cf3  \cf8 class=\cf9 "folder \cf6 \{\{\cf3  row_class.next() \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  folder|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  filename 
+\f3\b \cf10 in
+\f2\b0 \cf3  files \cf6 %\}\cf3 \
+  
+\f3\b \cf8 <li
+\f2\b0 \cf3  \cf8 class=\cf9 "file \cf6 \{\{\cf3  row_class.next() \cf6 \}\}\cf9 "
+\f3\b \cf8 >
+\f2\b0 \cf6 \{\{\cf3  filename|\cf13 e\cf3  \cf6 \}\}
+\f3\b \cf8 </li>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720
+
+\f3\b \cf8 </ul>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 A cycler has the following attributes and methods:\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 reset
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Resets the cycle to the first item.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 next
+\f1\b0\fs40 \cf3 ()
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Goes one item a head and returns the then current item.\
+\pard\pardeftab720
+
+\f3\b\fs32 \cf4 current
+\f1\b0\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 Returns the current item.\
+
+\b new in Jinja 2.1
+\b0 \
+\pard\pardeftab720
+
+\i \cf3 class 
+\f3\i0\b\fs32 \cf4 joiner
+\f1\b0\fs40 \cf3 (
+\i\fs34 sep='
+\i0 , 
+\i '
+\i0\fs40 )
+\fs34 \cf2 \'b6\cf3 \
+\pard\pardeftab720\sa340
+\cf3 A tiny helper that can be use to \'93join\'94 multiple sections. A joiner is passed a string and will return that string every time it\'92s called, except the first time in which situation it returns an empty string. You can use this to join things:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  pipe = joiner(\cf9 "|"\cf3 ) \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  categories \cf6 %\}\cf3  \cf6 \{\{\cf3  pipe() \cf6 \}\}\cf3 \
+    Categories: \cf6 \{\{\cf3  categories|\cf13 join\cf3 (\cf9 ", "\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  author \cf6 %\}\cf3  \cf6 \{\{\cf3  pipe() \cf6 \}\}\cf3 \
+    Author: \cf6 \{\{\cf3  author() \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 if
+\f2\b0 \cf3  can_edit \cf6 %\}\cf3  \cf6 \{\{\cf3  pipe() \cf6 \}\}\cf3 \
+    
+\f3\b \cf8 <a
+\f2\b0 \cf3  \cf8 href=\cf9 "?action=edit"
+\f3\b \cf8 >
+\f2\b0 \cf3 Edit
+\f3\b \cf8 </a>
+\f2\b0 \cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\b\fs34 \cf3 \cb1 new in Jinja 2.1
+\b0 \
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 Extensions\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 The following sections cover the built-in Jinja2 extensions that may be enabled by the application. The application could also provide further extensions not covered by this documentation. In that case there should be a separate document explaining the extensions.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 i18n\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 If the i18n extension is enabled it\'92s possible to mark parts in the template as translatable. To mark a section as translatable you can use 
+\i trans
+\i0 :\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <p>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 trans
+\f2\b0 \cf3  \cf6 %\}\cf3 Hello \cf6 \{\{\cf3  user \cf6 \}\}\cf3 !\cf6 \{%\cf3  
+\f3\b \cf10 endtrans
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 To translate a template expression \'97 say, using template filters or just accessing an attribute of an object \'97 you need to bind the expression to a name for use within the translation block:\
+\pard\pardeftab720
+
+\f3\b\fs28 \cf8 \cb7 <p>
+\f2\b0 \cf6 \{%\cf3  
+\f3\b \cf10 trans
+\f2\b0 \cf3  user=user.username \cf6 %\}\cf3 Hello \cf6 \{\{\cf3  user \cf6 \}\}\cf3 !\cf6 \{%\cf3  
+\f3\b \cf10 endtrans
+\f2\b0 \cf3  \cf6 %\}
+\f3\b \cf8 </p>
+\f2\b0 \cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 If you need to bind more than one expression inside a 
+\i trans
+\i0  tag, separate the pieces with a comma (
+\f2\fs28 \cf4 \cb5 ,
+\f1\fs34 \cf3 \cb1 ):\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 trans
+\f2\b0 \cf3  book_title=book.title, author=author.name \cf6 %\}\cf3 \
+This is \cf6 \{\{\cf3  book_title \cf6 \}\}\cf3  by \cf6 \{\{\cf3  author \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endtrans
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Inside trans tags no statements are allowed, only variable tags are.\
+To pluralize, specify both the singular and plural forms with the 
+\i pluralize
+\i0  tag, which appears between 
+\i trans
+\i0  and 
+\i endtrans
+\i0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 trans
+\f2\b0 \cf3  count=list|\cf13 length\cf3  \cf6 %\}\cf3 \
+There is \cf6 \{\{\cf3  count \cf6 \}\}\cf3  \cf6 \{\{\cf3  name \cf6 \}\}\cf3  object.\
+\cf6 \{%\cf3  
+\f3\b \cf10 pluralize
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+There are \cf6 \{\{\cf3  count \cf6 \}\}\cf3  \cf6 \{\{\cf3  name \cf6 \}\}\cf3  objects.\
+\cf6 \{%\cf3  
+\f3\b \cf10 endtrans
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Per default the first variable in a block is used to determine the correct singular or plural form. If that doesn\'92t work out you can specify the name which should be used for pluralizing by adding it as parameter to 
+\i pluralize
+\i0 :\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 trans
+\f2\b0 \cf3  ..., user_count=users|\cf13 length\cf3  \cf6 %\}\cf3 ...\
+\cf6 \{%\cf3  
+\f3\b \cf10 pluralize
+\f2\b0 \cf3  user_count \cf6 %\}\cf3 ...\cf6 \{%\cf3  
+\f3\b \cf10 endtrans
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 It\'92s also possible to translate strings in expressions. For that purpose three functions exist:\
+_ 
+\i gettext
+\i0 : translate a single string - 
+\i ngettext
+\i0 : translate a pluralizable string - 
+\i _
+\i0 : alias for 
+\i gettext
+\i0 \
+For example you can print a translated string easily this way:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  
+\f3\b \cf10 _
+\f2\b0 \cf3 (\cf9 'Hello World!'\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 To use placeholders you can use the 
+\i format
+\i0  filter:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  
+\f3\b \cf10 _
+\f2\b0 \cf3 (\cf9 'Hello %(user)s!'\cf3 )|\cf13 format\cf3 (user=user.username) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 For multiple placeholders always use keyword arguments to 
+\i format
+\i0  as other languages may not use the words in the same order.\
+\pard\pardeftab720\sa340
+
+\i \cf3 Changed in version 2.5.
+\i0 \
+If newstyle gettext calls are activated ({\field{\*\fldinst{HYPERLINK "http://jinja.pocoo.org/docs/extensions/#newstyle-gettext"}}{\fldrslt 
+\i \cf12 Newstyle Gettext}}), using placeholders is a lot easier:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{\{\cf3  gettext(\cf9 'Hello World!'\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  gettext(\cf9 'Hello %(name)s!'\cf3 , name=\cf9 'World'\cf3 ) \cf6 \}\}\cf3 \
+\cf6 \{\{\cf3  ngettext(\cf9 '%(num)d apple'\cf3 , \cf9 '%(num)d apples'\cf3 , apples|\cf13 count\cf3 ) \cf6 \}\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Note that the 
+\i ngettext
+\i0  function\'92s format string automatically receives the count as 
+\i num
+\i0  parameter additionally to the regular parameters.\
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 Expression Statement\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 If the expression-statement extension is loaded a tag called 
+\i do
+\i0  is available that works exactly like the regular variable expression (
+\f2\fs28 \cf4 \cb5 \{\{ ... \}\}
+\f1\fs34 \cf3 \cb1 ) just that it doesn\'92t print anything. This can be used to modify lists:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 do
+\f2\b0 \cf3  navigation.append(\cf9 'a string'\cf3 ) \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 Loop Controls\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 If the application enables the {\field{\*\fldinst{HYPERLINK "http://jinja.pocoo.org/docs/extensions/#loopcontrols-extension"}}{\fldrslt 
+\i \cf12 Loop Controls}} it\'92s possible to use 
+\i break
+\i0  and 
+\i continue
+\i0  in loops. When 
+\i break
+\i0  is reached, the loop is terminated; if 
+\i continue
+\i0  is reached, the processing is stopped and continues with the next iteration.\
+Here a loop that skips every second item:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 if
+\f2\b0 \cf3  \cf13 loop\cf3 .index 
+\f3\b \cf10 is
+\f2\b0 \cf3  \cf13 even\cf3  \cf6 %\}\{%\cf3  
+\f3\b \cf10 continue
+\f2\b0 \cf3  \cf6 %\}\{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    ...\
+\cf6 \{%\cf3  
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Likewise a look that stops processing after the 10th iteration:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 for
+\f2\b0 \cf3  user 
+\f3\b \cf10 in
+\f2\b0 \cf3  users \cf6 %\}\cf3 \
+    \cf6 \{%\cf3 - 
+\f3\b \cf10 if
+\f2\b0 \cf3  \cf13 loop\cf3 .index >= \cf14 10\cf3  \cf6 %\}\{%\cf3  
+\f3\b \cf10 break
+\f2\b0 \cf3  \cf6 %\}\{%\cf3  
+\f3\b \cf10 endif
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\cf6 \{%\cf3 - 
+\f3\b \cf10 endfor
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs52 \cf0 \cb1 With Statement\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 New in version 2.3.
+\i0 \
+If the application enables the {\field{\*\fldinst{HYPERLINK "http://jinja.pocoo.org/docs/extensions/#with-extension"}}{\fldrslt 
+\i \cf12 With Statement}} it is possible to use the 
+\i with
+\i0  keyword in templates. This makes it possible to create a new inner scope. Variables set within this scope are not visible outside of the scope.\
+With in a nutshell:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 with
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  foo = \cf14 42\cf3  \cf6 %\}\cf3 \
+    \cf6 \{\{\cf3  foo \cf6 \}\}\cf3            foo is 42 here\
+\cf6 \{%\cf3  
+\f3\b \cf10 endwith
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+foo is not visible here any longer\
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 Because it is common to set variables at the beginning of the scope you can do that within the with statement. The following two examples are equivalent:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 with
+\f2\b0 \cf3  foo = \cf14 42\cf3  \cf6 %\}\cf3 \
+    \cf6 \{\{\cf3  foo \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endwith
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 with
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    \cf6 \{%\cf3  
+\f3\b \cf10 set
+\f2\b0 \cf3  foo = \cf14 42\cf3  \cf6 %\}\cf3 \
+    \cf6 \{\{\cf3  foo \cf6 \}\}\cf3 \
+\cf6 \{%\cf3  
+\f3\b \cf10 endwith
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa200
+
+\f0\fs62 \cf0 \cb1 Autoescape Extension\cf2 \'b6\cf0 \
+\pard\pardeftab720\sa340
+
+\f1\i\fs34 \cf3 New in version 2.4.
+\i0 \
+If the application enables the {\field{\*\fldinst{HYPERLINK "http://jinja.pocoo.org/docs/extensions/#autoescape-extension"}}{\fldrslt 
+\i \cf12 Autoescape Extension}} one can activate and deactivate the autoescaping from within the templates.\
+Example:\
+\pard\pardeftab720
+
+\f2\fs28 \cf6 \cb7 \{%\cf3  
+\f3\b \cf10 autoescape
+\f2\b0 \cf3  
+\f3\b \cf10 true
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    Autoescaping is active within this block\
+\cf6 \{%\cf3  
+\f3\b \cf10 endautoescape
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\
+\cf6 \{%\cf3  
+\f3\b \cf10 autoescape
+\f2\b0 \cf3  
+\f3\b \cf10 false
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+    Autoescaping is inactive within this block\
+\cf6 \{%\cf3  
+\f3\b \cf10 endautoescape
+\f2\b0 \cf3  \cf6 %\}\cf3 \
+\pard\pardeftab720\sa340
+
+\f1\fs34 \cf3 \cb1 After the 
+\i endautoescape
+\i0  the behavior is reverted to what it was before.}

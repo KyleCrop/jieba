@@ -9,6 +9,10 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import jieba
 import json
 
+# Global variable used when adding word to dictionary
+currentCity = "Shanghai"
+#jieba.set_dictionary(currentCity)
+
 """pragma mark createApp"""
 
 #create the application and configure - note for bigger applications, configuration should be done in separate module
@@ -65,24 +69,33 @@ def init_db():
 def show_entries():
 	"""Shows entries in the database"""
 	db = get_db()
-	cur = db.execute('select proc, text from entries order by id desc')  # displays entire entries table
-	# need to make it only pull the very recent entry which matches == "".join(seg_list)
-	entries = cur.fetchall()
+	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
-	return render_template('show_entries.html', entries=entries, latest=latest)
+	entries = cur.fetchall()
+	return render_template('show_entries.html', latest=latest, entries=entries)
 
-@app.route('/add', methods = ['POST'])
-def add_entry():
-	"""Adds an entry to the database"""
+@app.route('/process', methods = ['POST'])
+def process_words():
+	"""Processes input and adds entry to the database"""
 	if not session.get('logged_in'):
 		abort(401)
 	db = get_db()
-	seg_list = jieba.cut_for_search(request.form['text'])
+	seg_list = jieba.cut_for_search(request.form['text']) #initializes trie
 	output = " / ".join(seg_list)
 	joutput = json.dumps(output)
 	db.execute('insert into entries (text, proc) values (?,?)', [request.form['text'], joutput])
 	db.commit()
 	return redirect(url_for('show_entries'))
+
+@app.route('/addWords', methods = ['POST'])
+def addToDictionary():
+	wordList = request.form.getlist['segCheckbox']
+	for word in wordList:
+		jieba.add_word(word.value)
+
+@app.route('/removeWords', methods = ['POST'])
+def removeFromDictionary():
+	return None
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

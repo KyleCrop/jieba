@@ -1,50 +1,84 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
-    <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
+    <!-- Form for input text entry -->
+    <form action="{{ url_for('process_words') }}" method=post class=add-entry>
       <dl>
         <dt>Text:
         <dd><textarea name=text rows=15 cols=60></textarea>
         <dd><input type=submit value=Process>
       </dl>
     </form>
+    
+    <!-- Container form for segmented word checkboxes
+         and to submit checked boxes to dictionary -->
+    <form action="{{ url_for('addToDictionary') }}" method=post>
+      <h3 id="checkContainer"></h3>
+      <input type=submit value="Add to Dictionary">
+    </form><br>
+
+    <form action="{{ url_for('removeFromDictionary') }}" method=post>
+      <input type=submit value="Remove from Dictionary">
+    </form><br> -->
+
+
+    <!-- Method to employ if submit button option doesn't work
+    <script>
+      /* Method for Add and Remove Buttons
+       * Returns: list of values of checked boxes from container form */
+      function getChecked(buttonName) {
+        var btnList = document.getElementsByName(buttonName);
+        var checkedList = new Array();
+        for (var i = 0;i<btnList.length;i++) {
+            if (btnList[i].checked === true) {
+                checkedList.push(btnList[i]);
+            }
+        }
+        return checkedList;
+      }
+    </script> -->
+
   {% endif %}
+
   <body>
+    <h2>
+      {{ latest.text|safe }}
+    </h2>
+    <script>
+      var last = {{ latest.proc|safe }};
+      last += "/";
+      document.write(last);
+    </script>
     {% for entry in entries %}
-  
       <h2>
-        {{ entry.text }}
+        {{ entry.text|safe }}
       </h2>
-  
       <script>
-        var processed = {{ entry.proc|safe }};
-        processed += "/";
-        document.write(processed);
+        var processed2 = {{ entry.proc|safe }};
+        document.write(processed2);
       </script>
-  
     {% endfor %}
-    <h2> {{ latest.proc|safe }} </h2>
     <script>
       //Create checkboxes
-      var last = {{ latest.proc|safe }};
       while (last.length > 0) {
         var ind = last.indexOf('/');
         var word = last.slice(0, ind);
         myFunction(word);
-        processed = last.slice(ind+1);
+        last = last.slice(ind+1);
       }
-  
+
       function myFunction(checkText) {
-        var btn=document.createElement("INPUT");
-        btn.type = "CHECKBOX";
-        var t=document.createTextNode("");
-        btn.appendChild(t);
-        document.body.appendChild(btn);
+        var checkbox = document.createElement("INPUT");
+        checkbox.type = "CHECKBOX";
+        checkbox.name = "segCheckbox";
+        checkbox.value = checkText;
+        var textContainer = document.getElementById("checkContainer");
+        textContainer.appendChild(checkbox);
         
-        var clickMeText = document.createElement("noButton");
+        var clickMeText = document.createElement("LABEL");
         var s = document.createTextNode(checkText);
         clickMeText.appendChild(s);
-        document.body.appendChild(clickMeText);
+        textContainer.appendChild(clickMeText);
       }
     </script>
   </body>
