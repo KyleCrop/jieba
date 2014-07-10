@@ -19,7 +19,7 @@
 
     <form action="{{ url_for('removeFromDictionary') }}" method=post>
       <input type=submit value="Remove from Dictionary">
-    </form><br> -->
+    </form><br> 
 
 
     <!-- Method to employ if submit button option doesn't work
@@ -75,6 +75,7 @@
         var textContainer = document.getElementById("checkContainer");
         textContainer.appendChild(checkbox);
         
+        //Just for adding text next to checkbox
         var clickMeText = document.createElement("LABEL");
         var s = document.createTextNode(checkText);
         clickMeText.appendChild(s);

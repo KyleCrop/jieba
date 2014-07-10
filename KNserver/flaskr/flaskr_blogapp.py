@@ -89,9 +89,10 @@ def process_words():
 
 @app.route('/addWords', methods = ['POST'])
 def addToDictionary():
-	wordList = request.form.getlist['segCheckbox']
+	wordList = request.form.getlist('segCheckbox')
 	for word in wordList:
-		jieba.add_word(word.value)
+		jieba.add_word(word,1)
+	return redirect(url_for('show_entries'))
 
 @app.route('/removeWords', methods = ['POST'])
 def removeFromDictionary():
