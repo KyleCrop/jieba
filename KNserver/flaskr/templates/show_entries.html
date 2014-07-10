@@ -1,6 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
+    <!-- Form for selecting city and category -->
+    <form id="selectionContainer" method=post>
+      <select id="cityContainter"></select>
+      <select id="categoryContainer"></select>
+    </form>
+        <!--
+        used
+        jobs
+        vehicles
+        part-time
+        housing
+        personals
+        pets
+        jobs
+        service
+        CV library
+        training -->
+      </select>
+    </form>
     <!-- Form for input text entry -->
     <form action="{{ url_for('process_words') }}" method=post class=add-entry>
       <dl>
@@ -17,12 +36,13 @@
       <input type=submit value="Add to Dictionary">
     </form><br>
 
+<!--
+    Remove dictionary button... not implemented
     <form action="{{ url_for('removeFromDictionary') }}" method=post>
       <input type=submit value="Remove from Dictionary">
-    </form><br> 
+    </form><br>
 
-
-    <!-- Method to employ if submit button option doesn't work
+    Method to employ if submit button option doesn't work
     <script>
       /* Method for Add and Remove Buttons
        * Returns: list of values of checked boxes from container form */
@@ -36,7 +56,7 @@
         }
         return checkedList;
       }
-    </script> -->
+    </script>  -->
 
   {% endif %}
 

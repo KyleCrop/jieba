@@ -11,7 +11,8 @@ import json
 
 # Global variable used when adding word to dictionary
 currentCity = "Shanghai"
-#jieba.set_dictionary(currentCity)
+currentCategory = "Phones"
+#jieba.set_dictionary(currentCity,currentCateogory)
 
 """pragma mark createApp"""
 
@@ -89,9 +90,10 @@ def process_words():
 
 @app.route('/addWords', methods = ['POST'])
 def addToDictionary():
-	wordList = request.form.getlist('segCheckbox')
+	wordList = request.form.get('segCheckbox')
 	for word in wordList:
 		jieba.add_word(word,1)
+	flash("You successfully updated the dictionary!")
 	return redirect(url_for('show_entries'))
 
 @app.route('/removeWords', methods = ['POST'])
