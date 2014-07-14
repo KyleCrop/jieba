@@ -6,6 +6,34 @@
       <select id="cityContainter"></select>
       <select id="categoryContainer"></select>
     </form>
+    <script>
+      var xmlhttp;
+      if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+      }
+      else { // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.open("GET", "view-source:http://www.baixing.com/?changeLocation=yes",true);
+      if (xmlhttp.responseText != null) {
+        var textToParse = xmlhttp.responseText;
+        var begin = textToParse.indexOf("new_cities");
+        //var end = textToParse.indexOf();
+        while (textToParse.length >0) {          //parse to ".", find ">", parse to "<"
+          //var pinStart = textToParse.indexOf("://");
+          //var pinEnd = textToParse.indexOf(".");
+          //var pinCity = textToParse.slice(pinStart+1,pinEnd);
+          //textToParse.slice(pinEnd);
+          //var charStart = textToParse.indexOf(">");
+          //var charEnd = textToParse.indexOf("<");
+          //var charCity = textToParse.slice(charStart+1,charend);
+          //create on option in select with id = cityContainer
+          //textToParse = textToParse.slice(endIndicator);
+        }
+      }
+      
+      //write function to parse responseText
+    </script>
         <!--
         used
         jobs
