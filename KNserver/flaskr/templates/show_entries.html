@@ -2,10 +2,10 @@
 {% block body %}
   {% if session.logged_in %}
     <!-- Form for selecting city and category -->
-    <form id="selectionContainer" method=post>
-      <select id="cityContainter"></select>
-      <select id="categoryContainer"></select>
-    </form>
+    <!-- <form id="selectionContainer" method=post> -->
+    <select id="cityContainer"></select>
+    <select id="categoryContainer"></select>
+    <!-- </form> -->
     <script>
       var xmlhttp;
       if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -14,25 +14,57 @@
       else { // code for IE6, IE5
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
       }
-      xmlhttp.open("GET", "view-source:http://www.baixing.com/?changeLocation=yes",true);
+      
+      //method to circumvent same-origin policy
+      function createCORSRequest(xhr, method, url){
+        if ("withCredentials" in xhr){
+            xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined"){
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else {
+            xhr = null;
+        }
+        return xhr;
+      }
+
+      var request = createCORSRequest(xmlhttp, "get", "http://www.stackoverflow.com/");
+      if (request){
+          request.onload = function() {
+              alert(xmlhttp.responseText);
+          };
+          //request.onreadystatechange = handler;
+          request.send();
+      }
+
       if (xmlhttp.responseText != null) {
         var textToParse = xmlhttp.responseText;
         var begin = textToParse.indexOf("new_cities");
-        //var end = textToParse.indexOf();
+        var end = textToParse.indexOf("</tr></table></table>");
+        textToParse = textToParse.slice(begin,end);
         while (textToParse.length >0) {          //parse to ".", find ">", parse to "<"
-          //var pinStart = textToParse.indexOf("://");
-          //var pinEnd = textToParse.indexOf(".");
-          //var pinCity = textToParse.slice(pinStart+1,pinEnd);
-          //textToParse.slice(pinEnd);
-          //var charStart = textToParse.indexOf(">");
-          //var charEnd = textToParse.indexOf("<");
-          //var charCity = textToParse.slice(charStart+1,charend);
+          //extract pinyin for city to add as option value
+          //****+3 to pinStart, see indexOf method source
+          var pinStart = textToParse.indexOf("://") + 3;
+          var pinEnd = textToParse.indexOf(".");
+          var pinCity = textToParse.slice(pinStart,pinEnd);
+          //cut textToParse to shorten indexOf method
+          textToParse = textToParse.slice(pinEnd+1);
+          //extract character string for option display
+          var charStart = textToParse.indexOf(">");
+          var charEnd = textToParse.indexOf("<");
+          var charCity = textToParse.slice(charStart+1,charend);
           //create on option in select with id = cityContainer
-          //textToParse = textToParse.slice(endIndicator);
+          var container = document.getElementById("cityContainer");
+          var opt = document.createElement('option');
+          opt.value = pinCity;
+          opt.innerHTML = charCity;
+          container.appendChild(opt);
+          //cut textToParse to maintain legitamacy of end condition of loop
+          textToParse = textToParse.slice(charEnd+1);
         }
-      }
-      
-      //write function to parse responseText
+      }*/
+
     </script>
         <!--
         used
@@ -46,8 +78,7 @@
         service
         CV library
         training -->
-      </select>
-    </form>
+
     <!-- Form for input text entry -->
     <form action="{{ url_for('process_words') }}" method=post class=add-entry>
       <dl>
