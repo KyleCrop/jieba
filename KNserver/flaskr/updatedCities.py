@@ -33,12 +33,10 @@ def parseCitiesWhile():
 		else:
 			pinEnd = content.find(".")
 			pinCity = content[pinStart + 3:pinEnd]
-			print pinCity
 
 			charStart = pinEnd + 15
 			charEnd = content.find("</a>")
 			charCity = content[charStart:charEnd]
-			print charCity
 
 			citiesDict[pinCity] = charCity
 			content = content[charEnd + 4:]
