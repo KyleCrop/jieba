@@ -54,35 +54,37 @@ def parseCities():
 	parsedCitiesFile.close()
 
 def parseCitiesWhile():
-    # Parse source code file to get content
-    citiesDict = {}  #pinyin : char
-    content = ""
-    myFile = open("Baixing_citySourceCode.txt", "r")
-    for line in myFile:
-	content += line
+	# Parse source code file to get content
+	citiesDict = {}  #pinyin : char
+	content = ""
+	myFile = open("Baixing_citySourceCode.txt", "r")
+	for line in myFile:
+		content += line
+	myFile.close()
 
-    # Cut content to only include table containing cities
-    begin = content.find("new_cities")
-    end = content.find("</tr></table></table>")
-    content = content[begin:end]
+	# Cut content to only include table containing cities
+	begin = content.find("new_cities")
+	end = content.find("</tr></table></table>")
+	content = content[begin:end]
 
-    # While loop to add cities pinyin and char to citiesDict
-    while (len(content) > 0):
-	pinStart = content.find("://")
-	if (pinStart == -1):
-	    content = ""
-	else:
-	    pinEnd = content.find(".")
-	    pinCity = content[pinStart + 3:pinEnd]
+	parsedCitiesFile = open('Parsed_Cities.txt', "w")
 
-	    charStart = pinEnd + 15
-	    charEnd = content.find("<")
-	    charCity = content[charStart:charEnd]
+	# While loop to add cities pinyin and char to citiesDict
+	while (len(content) > 0):
+		pinStart = content.find("://")
+		if (pinStart == -1):
+			content = ""
+		else:
+			pinEnd = content.find(".")
+			pinCity = content[pinStart + 3:pinEnd]
 
-	    citiesDict[pinCity] = charCity
-	    content = content[charEnd:]
+			charStart = pinEnd + 15
+			charEnd = content.find("</a>")
+			charCity = content[charStart:charEnd]
 
-    parsedCitiesFile = open("Parsed_Cities.txt", "w")
-    parsedCitiesFile.write(str(citiesDict))
-    parsedCitiesFile.close()
+			citiesDict[pinCity] = charCity
+			parsedCitiesFile.write(str(citiesDict[pinCity]))
+			content = content[charEnd + 4:]
+
+	parsedCitiesFile.close()
 
