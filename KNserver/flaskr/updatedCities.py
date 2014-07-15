@@ -1,5 +1,7 @@
 import urllib2
 
+citiesDict = {}  #pinyin : char
+
 def getCitiesHTML():
 	url = "http://baixing.com/?changeLocation=yes"    
 	html = urllib2.urlopen(url)    
@@ -55,7 +57,6 @@ def parseCities():
 
 def parseCitiesWhile():
 	# Parse source code file to get content
-	citiesDict = {}  #pinyin : char
 	content = ""
 	myFile = open("Baixing_citySourceCode.txt", "r")
 	for line in myFile:
@@ -77,14 +78,16 @@ def parseCitiesWhile():
 		else:
 			pinEnd = content.find(".")
 			pinCity = content[pinStart + 3:pinEnd]
+			print pinCity
 
 			charStart = pinEnd + 15
 			charEnd = content.find("</a>")
 			charCity = content[charStart:charEnd]
+			print charCity
 
 			citiesDict[pinCity] = charCity
-			parsedCitiesFile.write(str(citiesDict[pinCity]))
 			content = content[charEnd + 4:]
 
+	parsedCitiesFile.write(str(citiesDict))
 	parsedCitiesFile.close()
 
