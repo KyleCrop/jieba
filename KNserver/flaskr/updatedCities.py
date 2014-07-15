@@ -39,8 +39,8 @@ def parseCitiesWhile():
 			charCity = content[charStart:charEnd]
 
 			citiesDict[pinCity] = charCity
+			parsedCitiesFile.write(pinCity + ":" + charCity + "\n")
 			content = content[charEnd + 4:]
 
-	parsedCitiesFile.write(str(citiesDict))
 	parsedCitiesFile.close()
 

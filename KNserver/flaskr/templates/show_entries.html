@@ -8,11 +8,11 @@
       <select id="categoryContainer"></select>
     </form>
 
-    <button onclick="alert(citiesDictionary[0] + citiesDictionary[1])">Click for Dic</button>
+    <button onclick="alert(typeof(citiesDictionary))">Click for Dic</button>
 
     <script>
       //grab dictionary from Flask
-      var citiesDictionary = {{ citiesDict }};
+      var citiesDictionary = {{ citiesDict|safe }};
       //create on option in select with id = cityContainer
       var container = document.getElementById("cityContainer");
       var opt = document.createElement('option');
@@ -48,28 +48,6 @@
       <h3 id="checkContainer"></h3>
       <input type=submit value="Add to Dictionary">
     </form><br>
-
-<!--
-    Remove dictionary button... not implemented
-    <form action="{{ url_for('removeFromDictionary') }}" method=post>
-      <input type=submit value="Remove from Dictionary">
-    </form><br>
-
-    Method to employ if submit button option doesn't work
-    <script>
-      /* Method for Add and Remove Buttons
-       * Returns: list of values of checked boxes from container form */
-      function getChecked(buttonName) {
-        var btnList = document.getElementsByName(buttonName);
-        var checkedList = new Array();
-        for (var i = 0;i<btnList.length;i++) {
-            if (btnList[i].checked === true) {
-                checkedList.push(btnList[i]);
-            }
-        }
-        return checkedList;
-      }
-    </script>  -->
 
   {% endif %}
 
