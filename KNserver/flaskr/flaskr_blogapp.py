@@ -9,7 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import jieba
 import json
 import urllib2
-from updatedCities import getCitiesHTML
+from updatedCities import getCitiesHTML, parseCities
 
 # Global variable used when adding word to dictionary
 currentCity = "Shanghai"
@@ -18,6 +18,7 @@ currentCategory = "Phones"
 
 #Launch our "cronjob" python function to retreive updated cities list
 getCitiesHTML()
+parseCities()
 
 """pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
