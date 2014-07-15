@@ -1,55 +1,174 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
-    <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
+    <!-- Form for selecting city and category -->
+    <form id="selectionContainer" method=post>
+      <select id="cityContainer"></select>
+      <select id="categoryContainer"></select>
+    </form>
+	
+    <script>
+      /*var xmlhttp;
+      if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+      }
+      else { // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.open("GET", "view-source:http://www.baixing.com/?changeLocation=yes",true);
+      if (xmlhttp.responseText != null) {
+        var textToParse = xmlhttp.responseText;
+        var begin = textToParse.indexOf("new_cities");
+        //var end = textToParse.indexOf();
+        while (textToParse.length >0) {          //parse to ".", find ">", parse to "<"
+          //var pinStart = textToParse.indexOf("://");
+          //var pinEnd = textToParse.indexOf(".");
+          //var pinCity = textToParse.slice(pinStart+1,pinEnd);
+          //textToParse.slice(pinEnd);
+          //var charStart = textToParse.indexOf(">");
+          //var charEnd = textToParse.indexOf("<");
+          //var charCity = textToParse.slice(charStart+1,charend);
+          //create on option in select with id = cityContainer
+          //textToParse = textToParse.slice(endIndicator);
+        }
+      } */
+      
+	  /*function myFunction() {
+			var person = prompt("Please enter your name", "Harry Potter");
+			if (person != null) {
+				document.getElementById("demo").innerHTML =
+				"Hello " + person + "! How are you today?";
+			}
+		}
+	
+	  myFunction();*/
+      
+      /*function readTextFile(file)
+		{
+			var rawFile = new XMLHttpRequest();
+			rawFile.open("GET", file, true);
+			rawFile.onreadystatechange = function ()
+			{
+				alert(rawFile.readyState);
+				if(rawFile.readyState === 4)
+				{
+					alert(rawFile.status);
+				    if(rawFile.status === 200 || rawFile.status == 0)
+				    {
+				    	alert(rawFile.responseText);
+				        var allText = rawFile.responseText;
+				        alert(allText);
+				    };
+				};
+			};
+			rawFile.send(null);
+		};
+	  
+	  //var xmlhttp = "view-source:https://www.google.com.hk/?gfe_rd=cr&ei=XZfDU7P6L6uJ8QexrYCwDQ";
+	  //var xmlhttp = "view-source:http://www.baixing.com/?changeLocation=yes";
+	  var xmlhttp = "file:///home/kyle/Documents/jieba/KNserver/flasrk/Baixing_citySourceCode.txt";
+	  readTextFile(xmlhttp);*/
+	  
+	  
+		  
+      //write function to parse responseText
+    </script>
+        <!--
+        used
+        jobs
+        vehicles
+        part-time
+        housing
+        personals
+        pets
+        jobs
+        service
+        CV library
+        training -->
+      </select>
+    </form>
+    <!-- Form for input text entry -->
+    <form action="{{ url_for('process_words') }}" method=post class=add-entry>
       <dl>
         <dt>Text:
         <dd><textarea name=text rows=15 cols=60></textarea>
         <dd><input type=submit value=Process>
       </dl>
     </form>
+    
+    <!-- Container form for segmented word checkboxes
+         and to submit checked boxes to dictionary -->
+    <form action="{{ url_for('addToDictionary') }}" method=post>
+      <h3 id="checkContainer"></h3>
+      <input type=submit value="Add to Dictionary">
+    </form><br>
+
+<!--
+    Remove dictionary button... not implemented
+    <form action="{{ url_for('removeFromDictionary') }}" method=post>
+      <input type=submit value="Remove from Dictionary">
+    </form><br>
+
+    Method to employ if submit button option doesn't work
+    <script>
+      /* Method for Add and Remove Buttons
+       * Returns: list of values of checked boxes from container form */
+      function getChecked(buttonName) {
+        var btnList = document.getElementsByName(buttonName);
+        var checkedList = new Array();
+        for (var i = 0;i<btnList.length;i++) {
+            if (btnList[i].checked === true) {
+                checkedList.push(btnList[i]);
+            }
+        }
+        return checkedList;
+      }
+    </script>  -->
+
   {% endif %}
-  <html>
+
   <body>
-  {% for entry in entries %}
-      <h2>
-        {{ entry.text }}
-      </h2>
-
-	  <script>
-	  var processed = {{ entry.proc|safe }};
-	  processed += "/";
-	  document.write(processed);
-	  </script>
-      
-  {% endfor %}
-  
-  <script>
-      //Create checkboxes
+    <h2>
+      {{ latest.text|safe }}
+    </h2>
+    <script>
       var last = {{ latest.proc|safe }};
-
-	  while (last.length > 0) {
-		  var ind = last.indexOf('/');
-		  var word = last.slice(0, ind);
-		  myFunction(word);
-		  processed = last.slice(ind+1);
-	  }
+      last += "/";
+      document.write(last);
+    </script>
+    {% for entry in entries %}
+      <h2>
+        {{ entry.text|safe }}
+      </h2>
+      <script>
+        var processed2 = {{ entry.proc|safe }};
+        document.write(processed2);
+      </script>
+    {% endfor %}
+    <script>
+      //Create checkboxes
+      while (last.length > 0) {
+        var ind = last.indexOf('/');
+        var word = last.slice(0, ind);
+        myFunction(word);
+        last = last.slice(ind+1);
+      }
 	  
-  	  function myFunction(checkText)
-	  {
-	  var btn=document.createElement("INPUT");
-	  btn.type = "CHECKBOX";
-	  var t=document.createTextNode("");
-	  btn.appendChild(t);
-	  document.body.appendChild(btn);
-	  
-	  var clickMeText = document.createElement("noButton");
-	  var s = document.createTextNode(checkText);
-	  clickMeText.appendChild(s);
-	  document.body.appendChild(clickMeText);
-	  }
-  </script>
-  	  
+	  //Creates checkboxes
+      function myFunction(checkText) {
+        var checkbox = document.createElement("INPUT");
+        checkbox.type = "CHECKBOX";
+        checkbox.name = "segCheckbox";
+        checkbox.value = checkText;
+        var textContainer = document.getElementById("checkContainer");
+        textContainer.appendChild(checkbox);
+        
+        //Just for adding text next to checkbox
+        var clickMeText = document.createElement("LABEL");
+        var s = document.createTextNode(checkText);
+        clickMeText.appendChild(s);
+        textContainer.appendChild(clickMeText);
+      }
+    </script>
   </body>
-  </html>
 {% endblock %}

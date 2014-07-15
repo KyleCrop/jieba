@@ -8,14 +8,18 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import jieba
 import json
+import urllib2
+from updatedCities import getCitiesHTML
 
 # Global variable used when adding word to dictionary
 currentCity = "Shanghai"
 currentCategory = "Phones"
 #jieba.set_dictionary(currentCity,currentCateogory)
 
-"""pragma mark createApp"""
+#Launch our "cronjob" python function to retreive updated cities list
+getCitiesHTML()
 
+"""pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)
 app.config.from_object(__name__)

@@ -3,11 +3,12 @@
   {% if session.logged_in %}
     <!-- Form for selecting city and category -->
     <form id="selectionContainer" method=post>
-      <select id="cityContainter"></select>
+      <select id="cityContainer"></select>
       <select id="categoryContainer"></select>
     </form>
+	
     <script>
-      var xmlhttp;
+      /*var xmlhttp;
       if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
       }
@@ -30,8 +31,20 @@
           //create on option in select with id = cityContainer
           //textToParse = textToParse.slice(endIndicator);
         }
-      }
+      } */
       
+	  /*function myFunction() {
+			var person = prompt("Please enter your name", "Harry Potter");
+			if (person != null) {
+				document.getElementById("demo").innerHTML =
+				"Hello " + person + "! How are you today?";
+			}
+		}
+	
+	  myFunction();*/
+	  
+	  function 
+		  
       //write function to parse responseText
     </script>
         <!--
@@ -114,7 +127,8 @@
         myFunction(word);
         last = last.slice(ind+1);
       }
-
+	  
+	  //Creates checkboxes
       function myFunction(checkText) {
         var checkbox = document.createElement("INPUT");
         checkbox.type = "CHECKBOX";
