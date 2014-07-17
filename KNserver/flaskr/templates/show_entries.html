@@ -4,22 +4,26 @@
     <!-- Form for selecting city and category -->
 
     <form id="selectionContainer" method=post>
-      <select id="cityContainer"></select>
-      <select id="categoryContainer"></select>
+      <select id="cityContainer">
+        {% for key, value in citiesDict.iteritems() %}
+          <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
+        {% endfor %}
+      </select>
+      <select id="categoryContainer">
+        <option id="used" value="ershou">二手</option>
+        <option id="employment" value="qiuzhi">求职</option>
+        <option id="vehicle" value="cheliang">车辆</option>
+        <option id="concurrent" value="jianzhi">兼职</option>
+        <option id="house" value="fangwu">房屋</option>
+        <option id="friends" value="jiaoyou">交友</option>
+        <option id="pet" value="chongwu">宠物</option>
+        <option id="recruit" value="zhaopin">招聘</option>
+        <option id="services" value="fuwu">服务</option>
+        <option id="cv" value="jianliku">简历库</option>
+        <option id="training" value="peixun">培训</option>
+      </select>
     </form>
 
-    <button onclick="alert(typeof(citiesDictionary))">Click for Dic</button>
-
-    <script>
-      //grab dictionary from Flask
-      var citiesDictionary = {{ citiesDict|safe }};
-      //create on option in select with id = cityContainer
-      var container = document.getElementById("cityContainer");
-      var opt = document.createElement('option');
-      opt.value = pinCity;
-      opt.innerHTML = charCity;
-      container.appendChild(opt);
-    </script>
         <!--
         used
         jobs
@@ -96,3 +100,4 @@
     </script>
   </body>
 {% endblock %}
+

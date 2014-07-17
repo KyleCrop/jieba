@@ -9,7 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import jieba
 import json
 import urllib2
-from updatedCities import getCitiesHTML, parseCities
+from updatedCities import citiesDict, getCitiesHTML, parseCitiesWhile
 
 # Global variable used when adding word to dictionary
 currentCity = "Shanghai"
@@ -18,7 +18,7 @@ currentCategory = "Phones"
 
 #Launch our "cronjob" python function to retreive updated cities list
 getCitiesHTML()
-parseCities()
+parseCitiesWhile()
 
 """pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
@@ -74,11 +74,12 @@ def init_db():
 @app.route('/')
 def show_entries():
 	"""Shows entries in the database"""
+	global citiesDict
 	db = get_db()
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
 	entries = cur.fetchall()
-	return render_template('show_entries.html', latest=latest, entries=entries)
+	return render_template('show_entries.html', latest=latest, entries=entries, citiesDict = citiesDict)
 
 @app.route('/process', methods = ['POST'])
 def process_words():
