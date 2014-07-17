@@ -1,16 +1,18 @@
 import urllib2
+import chardet
 
 citiesDict = {}  #pinyin : char
 
 def getCitiesHTML():
-	url = "http://baixing.com/?changeLocation=yes"    
-	html = urllib2.urlopen(url)    
+	url = "http://baixing.com/?changeLocation=yes"
+	html = urllib2.urlopen(url)
 	myFile = open("Baixing_citySourceCode.txt", "w")
 	for line in html:
 		myFile.write(line)
 	myFile.close
 
 def parseCitiesWhile():
+	global citiesDict
 	# Parse source code file to get content
 	content = ""
 	myFile = open("Baixing_citySourceCode.txt", "r")
@@ -36,11 +38,10 @@ def parseCitiesWhile():
 
 			charStart = pinEnd + 15
 			charEnd = content.find("</a>")
-			charCity = content[charStart:charEnd]
+			charCity = unicode(content[charStart:charEnd], "utf-8")
 
 			citiesDict[pinCity] = charCity
-			parsedCitiesFile.write(pinCity + ":" + charCity + "\n")
+			parsedCitiesFile.write(pinCity + ":" + charCity.encode("utf-8") + "\n")
 			content = content[charEnd + 4:]
 
 	parsedCitiesFile.close()
-

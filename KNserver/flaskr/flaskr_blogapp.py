@@ -16,16 +16,17 @@ currentCity = "Shanghai"
 currentCategory = "Phones"
 #jieba.set_dictionary(currentCity,currentCateogory)
 
-#Launch our "cronjob" python function to retreive updated cities list
+#Launch  "cronjob" python function to retreive updated cities list
 getCitiesHTML()
 parseCitiesWhile()
+print citiesDict
 
 """pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'development key', USERNAME = 'admin', PASSWORD = 'default'))
+app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'development key', USERNAME = 'admin', PASSWORD = 'default', JSON_AS_ASCII = 'False'))
 app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 
 #config object like a dictionary, can add new values like a dic
@@ -74,12 +75,16 @@ def init_db():
 @app.route('/')
 def show_entries():
 	"""Shows entries in the database"""
-	global citiesDict
 	db = get_db()
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
 	entries = cur.fetchall()
-	return render_template('show_entries.html', latest=latest, entries=entries, citiesDict = citiesDict)
+	return render_template('show_entries.html', latest=latest, entries=entries)
+
+@app.context_processor
+def inject_citiesDict():
+		global citiesDict
+		return dict(citiesDict = citiesDict)
 
 @app.route('/process', methods = ['POST'])
 def process_words():
