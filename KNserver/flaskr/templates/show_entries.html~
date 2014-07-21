@@ -2,96 +2,23 @@
 {% block body %}
   {% if session.logged_in %}
     <!-- Form for selecting city and category -->
-<<<<<<< HEAD
+
     <form id="selectionContainer" method=post>
       <select id="cityContainer"></select>
       <select id="categoryContainer"></select>
     </form>
-	
-=======
-    <!-- <form id="selectionContainer" method=post> -->
-    <select id="cityContainer"></select>
-    <select id="categoryContainer"></select>
-    <!-- </form> -->
->>>>>>> 60688d5d3cd96bdcae7ce166efd22488466104a0
+
+    <button onclick="alert(typeof(citiesDictionary))">Click for Dic</button>
+
     <script>
-      /*var xmlhttp;
-      if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-      }
-      else { // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      
-      //method to circumvent same-origin policy
-      function createCORSRequest(xhr, method, url){
-        if ("withCredentials" in xhr){
-            xhr.open(method, url, true);
-        } else if (typeof XDomainRequest != "undefined"){
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-        } else {
-            xhr = null;
-        }
-        return xhr;
-      }
-
-      var request = createCORSRequest(xmlhttp, "get", "http://www.stackoverflow.com/");
-      if (request){
-          request.onload = function() {
-              alert(xmlhttp.responseText);
-          };
-          //request.onreadystatechange = handler;
-          request.send();
-      }
-
-      if (xmlhttp.responseText != null) {
-        var textToParse = xmlhttp.responseText;
-        var begin = textToParse.indexOf("new_cities");
-        var end = textToParse.indexOf("</tr></table></table>");
-        textToParse = textToParse.slice(begin,end);
-        while (textToParse.length >0) {          //parse to ".", find ">", parse to "<"
-          //extract pinyin for city to add as option value
-          //****+3 to pinStart, see indexOf method source
-          var pinStart = textToParse.indexOf("://") + 3;
-          var pinEnd = textToParse.indexOf(".");
-          var pinCity = textToParse.slice(pinStart,pinEnd);
-          //cut textToParse to shorten indexOf method
-          textToParse = textToParse.slice(pinEnd+1);
-          //extract character string for option display
-          var charStart = textToParse.indexOf(">");
-          var charEnd = textToParse.indexOf("<");
-          var charCity = textToParse.slice(charStart+1,charend);
-          //create on option in select with id = cityContainer
-          var container = document.getElementById("cityContainer");
-          var opt = document.createElement('option');
-          opt.value = pinCity;
-          opt.innerHTML = charCity;
-          container.appendChild(opt);
-          //cut textToParse to maintain legitamacy of end condition of loop
-          textToParse = textToParse.slice(charEnd+1);
-        }
-
-      } */
-      
-	  /*function myFunction() {
-			var person = prompt("Please enter your name", "Harry Potter");
-			if (person != null) {
-				document.getElementById("demo").innerHTML =
-				"Hello " + person + "! How are you today?";
-			}
-		}
-	
-	  myFunction();*/
-	  
-	  /*
-	  function 
-		  
-      //write function to parse responseText
-
-      }*/
-
->>>>>>> 60688d5d3cd96bdcae7ce166efd22488466104a0
+      //grab dictionary from Flask
+      var citiesDictionary = {{ citiesDict|safe }};
+      //create on option in select with id = cityContainer
+      var container = document.getElementById("cityContainer");
+      var opt = document.createElement('option');
+      opt.value = pinCity;
+      opt.innerHTML = charCity;
+      container.appendChild(opt);
     </script>
         <!--
         used
@@ -121,28 +48,6 @@
       <h3 id="checkContainer"></h3>
       <input type=submit value="Add to Dictionary">
     </form><br>
-
-<!--
-    Remove dictionary button... not implemented
-    <form action="{{ url_for('removeFromDictionary') }}" method=post>
-      <input type=submit value="Remove from Dictionary">
-    </form><br>
-
-    Method to employ if submit button option doesn't work
-    <script>
-      /* Method for Add and Remove Buttons
-       * Returns: list of values of checked boxes from container form */
-      function getChecked(buttonName) {
-        var btnList = document.getElementsByName(buttonName);
-        var checkedList = new Array();
-        for (var i = 0;i<btnList.length;i++) {
-            if (btnList[i].checked === true) {
-                checkedList.push(btnList[i]);
-            }
-        }
-        return checkedList;
-      }
-    </script>  -->
 
   {% endif %}
 

@@ -3,7 +3,11 @@
   {% if session.logged_in %}
     <!-- Form for selecting city and category -->
 
+<<<<<<< HEAD
     <form id="selectionContainer" action="{{ url_for('updateDictionary') }}" method=post>
+=======
+    <form id="selectionContainer" method=post>
+>>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
       <select id="cityContainer">
         {% for key, value in citiesDict.iteritems() %}
           <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
@@ -22,9 +26,27 @@
         <option id="cv" value="jianliku">简历库</option>
         <option id="training" value="peixun">培训</option>
       </select>
+<<<<<<< HEAD
       <input type='submit' value='Updated Dictionary' />
     </form>
 
+=======
+    </form>
+
+        <!--
+        used
+        jobs
+        vehicles
+        part-time
+        housing
+        personals
+        pets
+        jobs
+        service
+        CV library
+        training -->
+
+>>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
     <!-- Form for input text entry -->
     <form action="{{ url_for('process_words') }}" method=post class=add-entry>
       <dl>
@@ -87,3 +109,4 @@
     </script>
   </body>
 {% endblock %}
+
