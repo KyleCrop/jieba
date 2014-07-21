@@ -11,15 +11,9 @@ import json
 import urllib2
 from updatedCities import citiesDict, getCitiesHTML, parseCitiesWhile
 
-# Global variable used when adding word to dictionary
-currentCity = "Shanghai"
-currentCategory = "Phones"
-#jieba.set_dictionary(currentCity,currentCateogory)
-
 #Launch  "cronjob" python function to retreive updated cities list
 getCitiesHTML()
 parseCitiesWhile()
-print citiesDict
 
 """pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
@@ -81,6 +75,7 @@ def show_entries():
 	entries = cur.fetchall()
 	return render_template('show_entries.html', latest=latest, entries=entries)
 
+#Makes citiesDict available to all templates
 @app.context_processor
 def inject_citiesDict():
 		global citiesDict
@@ -107,9 +102,9 @@ def addToDictionary():
 	flash("You successfully updated the dictionary!")
 	return redirect(url_for('show_entries'))
 
-@app.route('/removeWords', methods = ['POST'])
-def removeFromDictionary():
-	return None
+@app.route('/updateDictionary', methods = ['POST'])
+def updateDictionary():
+	return redirect(url_for('show_entries'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

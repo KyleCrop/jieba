@@ -3,7 +3,7 @@
   {% if session.logged_in %}
     <!-- Form for selecting city and category -->
 
-    <form id="selectionContainer" method=post>
+    <form id="selectionContainer" action="{{ url_for('updateDictionary') }}" method=post>
       <select id="cityContainer">
         {% for key, value in citiesDict.iteritems() %}
           <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
@@ -22,20 +22,8 @@
         <option id="cv" value="jianliku">简历库</option>
         <option id="training" value="peixun">培训</option>
       </select>
+      <input type='submit' value='Updated Dictionary' />
     </form>
-
-        <!--
-        used
-        jobs
-        vehicles
-        part-time
-        housing
-        personals
-        pets
-        jobs
-        service
-        CV library
-        training -->
 
     <!-- Form for input text entry -->
     <form action="{{ url_for('process_words') }}" method=post class=add-entry>
@@ -50,7 +38,7 @@
          and to submit checked boxes to dictionary -->
     <form action="{{ url_for('addToDictionary') }}" method=post>
       <h3 id="checkContainer"></h3>
-      <input type=submit value="Add to Dictionary">
+      <input type=submit value="Add to Dictionary" />
     </form><br>
 
   {% endif %}
@@ -81,8 +69,7 @@
         myFunction(word);
         last = last.slice(ind+1);
       }
-	  
-	  //Creates checkboxes
+      //Creates checkboxes
       function myFunction(checkText) {
         var checkbox = document.createElement("INPUT");
         checkbox.type = "CHECKBOX";
