@@ -17,11 +17,12 @@ getCitiesHTML()
 parseCitiesWhile()
 
 """pragma mark createApp"""
+
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'baixing_jieba'))
+app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = False, SECRET_KEY = 'baixing_jieba'))
 app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 
 #config object like a dictionary, can add new values like a dic
@@ -30,11 +31,10 @@ app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 #can also use from_object() and config object from module provided will be loaded. Only uppercase var names included
 #SECRET_KEY is to keep client-side sessions secure.  Make complex and hard to guess
 
-"""pragma mark databaseAndApplicationContext"""
+"""pragma mark Database and Application Context"""
 
-#opening connection to the specified database.  Makes ______ easier.
 def connect_db():
-	"""Connects to the specific database created for app
+	"""Connects to the database
 	Uses sqlite3.Row object to represent rows - treat rows
 	as dictionaries rather than tuples"""
 	rv = sqlite3.connect(app.config['DATABASE'])
@@ -48,7 +48,7 @@ def get_db():
 		g.sqlite_db = connect_db()
 	return g.sqlite_db
 
-@app.teardown_appcontext #app context created before request and torn down after request
+@app.teardown_appcontext
 def close_db(error):
 	"""Closes the database again at the end of request
 	Tears down the app """
@@ -65,13 +65,13 @@ def init_db():
 			db.cursor().executescript(f.read()) #executes the schema.sql script to create database
 		db.commit() #commit the changes -- teardown functions executed afterward
 
-"""pragma mark viewFunction"""
+"""pragma mark View Functionality"""
 
 @app.route('/')
 def show_entries():
-	"""Shows entries in the database"""
+	"""Populates view with entries from database,
+	passes entries to show_entries template and renders"""
 	session.clear()
-	print session
 	db = get_db()
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
@@ -81,12 +81,13 @@ def show_entries():
 #Makes citiesDict available to all templates
 @app.context_processor
 def inject_citiesDict():
-		global citiesDict
-		return dict(citiesDict = citiesDict)
+	"""Passes the cities dictionary to application context"""
+	global citiesDict
+	return dict(citiesDict = citiesDict)
 
 @app.route('/process', methods = ['POST'])
 def process_words():
-	"""Processes input and adds entry to the database"""
+	"""Processes text input and JSON dumps entry to the database"""
 	db = get_db()
 	seg_list = jieba.cut_for_search(request.form['text']) #initializes trie
 	output = " / ".join(seg_list)
@@ -97,6 +98,8 @@ def process_words():
 
 @app.route('/addWords', methods = ['POST'])
 def addToDictionary():
+	"""Grabs list of checked words and adds to the operating dictionary
+	Note: If word already exists in dictionary, increments frequency"""
 	wordList = request.form.get('segCheckbox')
 	for word in wordList:
 		jieba.add_word(word,1)
@@ -105,6 +108,7 @@ def addToDictionary():
 
 @app.route('/updateDictionary', methods = ['POST'])
 def updateDictionary():
+	"""Changes the operating dictionary based on user choice on web"""
 	city = request.form.get("cityContainer")
 	category = request.form.get("categoryContainer")
 	#jieba.set_dictionary('/home/noah/jieba/KNserver/flaskr/jieba/dictionaries/%(cityVar)s/%(cityVar)s_%(categoryVar)s.txt' % \ {'cityVar':city, 'catVar':category})
@@ -113,6 +117,8 @@ def updateDictionary():
 
 @app.route('/queryDictionary', methods = ['GET', 'POST'])
 def queryDictionary():
+	"""Adds queried word to session dictionary and renders the
+	query dictionary page"""
 	try:
 		queriedWord = session['queriedWord'].decode('utf-8')
 		queriedWordFrequency = session['queriedWordFrequency'].decode('utf-8')
@@ -123,6 +129,8 @@ def queryDictionary():
 
 @app.route('/sendQuery', methods = ['GET', 'POST'])
 def sendQuery():
+	"""Processes user query and sets session vars for word and frequency.
+	Values are accessed with keys queriedWord and queriedWordFrequency"""
 	query = request.form.get('query') #might have to fix encoding, keep in mind! look for decoding error
 	dictionary = open(jieba.get_abs_path_dict())
 	dictArray = _searchDictionary(dictionary, query)
@@ -136,18 +144,26 @@ def sendQuery():
 ''' pragma mark Helper Functions '''
 
 def _searchDictionary(dictionary, query):
+	"""Helper function: searches the dictionary text file for
+	given query, returns array with format [word,frequency] or empty
+	dictionary.  Note: if line has improper encoding will not be searched"""
 	for line in dictionary:
 		encodingDict = chardet.detect(line)
+		print encodingDict
 		encoding = encodingDict['encoding']
-		line = unicode(line, encoding)
-		if query in line:
-			ind = line.find(' ')
-			word = line[0:ind]
-			if query == word:
-				print "Found it"
-				ind2 = line.rfind(' ')
-				frequency = line[ind+1:ind2]
-				return [word.encode('utf-8'),frequency.encode('utf-8')]
+		try:
+			line = unicode(line, encoding)
+			if query in line:
+				ind = line.find(' ')
+				word = line[0:ind]
+				if query == word:
+					print "Found it"
+					ind2 = line.rfind(' ')
+					frequency = line[ind+1:ind2]
+					return [word.encode('utf-8'),frequency.encode('utf-8')]
+		except:
+			print "I failed to decode: " + encoding
+			pass
 	return []
 
 
