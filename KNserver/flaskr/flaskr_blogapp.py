@@ -12,6 +12,10 @@ import urllib2
 from updatedCities import citiesDict, getCitiesHTML, parseCitiesWhile
 import chardet
 
+#From Miguel Gringberg
+from flask import Flask, jsonify, abort, request, make_response, url_for
+from requests.auth import HTTPBasicAuth
+
 #Launch  "cronjob" python function to retreive updated cities list
 getCitiesHTML()
 parseCitiesWhile()
@@ -21,6 +25,8 @@ parseCitiesWhile()
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)
 app.config.from_object(__name__)
+#For verification 
+auth = HTTPBasicAuth()
 
 app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = False, SECRET_KEY = 'baixing_jieba'))
 app.config.from_envvar('FLASKR_SETTINGS', silent = True)
@@ -31,8 +37,29 @@ app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 #can also use from_object() and config object from module provided will be loaded. Only uppercase var names included
 #SECRET_KEY is to keep client-side sessions secure.  Make complex and hard to guess
 
+@auth.get_password
+def get_password(username):
+	if username == 'miguel':
+		return 'python'
+	return None
+
+@auth.error_handler
+def unauthorized():
+	
+	return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
+	# return 403 instead of 401 to prevent browsers from displaying the default auth dialog
+
+@app.errorhandler(400)
+def not_found(error):
+	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+ 
+@app.errorhandler(404)
+def not_found(error):
+	return make_response(jsonify( { 'error': 'Not found' } ), 404)
+
 """pragma mark Database and Application Context"""
 
+@auth.login_required
 def connect_db():
 	"""Connects to the database
 	Uses sqlite3.Row object to represent rows - treat rows
@@ -41,6 +68,7 @@ def connect_db():
 	rv.row_factory = sqlite3.Row
 	return rv
 
+@auth.login_required
 def get_db():
 	"""Opens a new database connection if there is not one open yet for 
 	current application context"""
@@ -48,6 +76,7 @@ def get_db():
 		g.sqlite_db = connect_db()
 	return g.sqlite_db
 
+@auth.login_required
 @app.teardown_appcontext
 def close_db(error):
 	"""Closes the database again at the end of request
@@ -55,6 +84,7 @@ def close_db(error):
 	if hasattr(g, 'sqlite_db'):
 		g.sqlite_db.close()
 
+@auth.login_required
 def init_db(): 
 	"""Creates the application context before request is sent
 	Without application context, g object (where store information) does
@@ -66,7 +96,7 @@ def init_db():
 		db.commit() #commit the changes -- teardown functions executed afterward
 
 """pragma mark View Functionality"""
-
+@auth.login_required
 @app.route('/')
 def show_entries():
 	"""Populates view with entries from database,
@@ -76,15 +106,19 @@ def show_entries():
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
 	entries = cur.fetchall()
-	return render_template('show_entries.html', latest=latest, entries=entries)
+	noahsMoms = [{'id': 1, 'description': 'hot', 'name': 'Shiela'}, {'id': 2, 'description': 'nahh', 'name': 'Jessica'}]
+	#return render_template('show_entries.html', latest=latest, entries=entries)
+	return jsonify( { 'Noahs moms': noahsMoms } )
 
 #Makes citiesDict available to all templates
+@auth.login_required
 @app.context_processor
 def inject_citiesDict():
 	"""Passes the cities dictionary to application context"""
 	global citiesDict
 	return dict(citiesDict = citiesDict)
 
+@auth.login_required
 @app.route('/process', methods = ['POST'])
 def process_words():
 	"""Processes text input and JSON dumps entry to the database"""
@@ -96,6 +130,7 @@ def process_words():
 	db.commit()
 	return redirect(url_for('show_entries'))
 
+@auth.login_required
 @app.route('/addWords', methods = ['POST'])
 def addToDictionary():
 	"""Grabs list of checked words and adds to the operating dictionary
@@ -106,6 +141,7 @@ def addToDictionary():
 	flash("You successfully updated the dictionary!")
 	return redirect(url_for('show_entries'))
 
+@auth.login_required
 @app.route('/updateDictionary', methods = ['POST'])
 def updateDictionary():
 	"""Changes the operating dictionary based on user choice on web"""
@@ -115,6 +151,7 @@ def updateDictionary():
 	print "Operating dictionary is: " + str(jieba.get_abs_path_dict())
 	return redirect(url_for('show_entries'))
 
+@auth.login_required
 @app.route('/queryDictionary', methods = ['GET', 'POST'])
 def queryDictionary():
 	"""Adds queried word to session dictionary and renders the
@@ -127,6 +164,7 @@ def queryDictionary():
 		queriedWordFrequency = ''
 	return render_template('Query_Dictionary.html', queriedWord=queriedWord, queriedWordFrequency=queriedWordFrequency)
 
+@auth.login_required
 @app.route('/sendQuery', methods = ['GET', 'POST'])
 def sendQuery():
 	"""Processes user query and sets session vars for word and frequency.
@@ -141,8 +179,9 @@ def sendQuery():
 		print "Not found"
 	return redirect(url_for('queryDictionary'))
 
-''' pragma mark Helper Functions '''
 
+''' pragma mark Helper Functions '''
+@auth.login_required
 def _searchDictionary(dictionary, query):
 	"""Helper function: searches the dictionary text file for
 	given query, returns array with format [word,frequency] or empty
