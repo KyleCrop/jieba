@@ -1,8 +1,9 @@
 import urllib2
 import chardet
 
-citiesDict = {}  #pinyin : char
+citiesDict = {}  #pinyin:char
 
+#Grabs html off Baixing of cities page
 def getCitiesHTML():
 	url = "http://baixing.com/?changeLocation=yes"
 	html = urllib2.urlopen(url)
@@ -11,6 +12,7 @@ def getCitiesHTML():
 		myFile.write(line)
 	myFile.close
 
+#Finds just the city names (pinyin and char), writes to Parsed_Cities.txt
 def parseCitiesWhile():
 	global citiesDict
 	# Parse source code file to get content
@@ -22,7 +24,7 @@ def parseCitiesWhile():
 
 	# Cut content to only include table containing cities
 	begin = content.find("new_cities")
-	end = content.find("</tr></table></table>")
+	end = content.find("</tr></table></table>")  # end of cities table
 	content = content[begin:end]
 
 	parsedCitiesFile = open('Parsed_Cities.txt', "w")
