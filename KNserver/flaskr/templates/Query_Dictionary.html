@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+    <form name='queryContainer' action='{{ url_for("sendQuery") }}' method=post>
+        <input type='text' name='query' />
+        <input type=submit value=Search />
+    </form>
+    {{ 'Word: ' + queriedWord|safe }} <br>
+    {{ 'Frequency: ' + queriedWordFrequency|safe }}
+
+{% endblock %}

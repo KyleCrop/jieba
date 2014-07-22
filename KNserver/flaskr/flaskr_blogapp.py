@@ -10,26 +10,18 @@ import jieba
 import json
 import urllib2
 from updatedCities import citiesDict, getCitiesHTML, parseCitiesWhile
+import chardet
 
-<<<<<<< HEAD
-=======
-# Global variable used when adding word to dictionary
-currentCity = "Shanghai"
-currentCategory = "Phones"
-#jieba.set_dictionary(currentCity,currentCateogory)
-
->>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
 #Launch  "cronjob" python function to retreive updated cities list
 getCitiesHTML()
 parseCitiesWhile()
-print citiesDict
 
 """pragma mark createApp"""
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'development key', USERNAME = 'admin', PASSWORD = 'default', JSON_AS_ASCII = 'False'))
+app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'baixing_jieba'))
 app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 
 #config object like a dictionary, can add new values like a dic
@@ -78,16 +70,15 @@ def init_db():
 @app.route('/')
 def show_entries():
 	"""Shows entries in the database"""
+	session.clear()
+	print session
 	db = get_db()
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
 	entries = cur.fetchall()
 	return render_template('show_entries.html', latest=latest, entries=entries)
 
-<<<<<<< HEAD
 #Makes citiesDict available to all templates
-=======
->>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
 @app.context_processor
 def inject_citiesDict():
 		global citiesDict
@@ -96,8 +87,6 @@ def inject_citiesDict():
 @app.route('/process', methods = ['POST'])
 def process_words():
 	"""Processes input and adds entry to the database"""
-	if not session.get('logged_in'):
-		abort(401)
 	db = get_db()
 	seg_list = jieba.cut_for_search(request.form['text']) #initializes trie
 	output = " / ".join(seg_list)
@@ -116,29 +105,50 @@ def addToDictionary():
 
 @app.route('/updateDictionary', methods = ['POST'])
 def updateDictionary():
+	city = request.form.get("cityContainer")
+	category = request.form.get("categoryContainer")
+	#jieba.set_dictionary('/home/noah/jieba/KNserver/flaskr/jieba/dictionaries/%(cityVar)s/%(cityVar)s_%(categoryVar)s.txt' % \ {'cityVar':city, 'catVar':category})
+	print "Operating dictionary is: " + str(jieba.get_abs_path_dict())
 	return redirect(url_for('show_entries'))
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-	"""Login protocol"""
-	error = None
-	if request.method == 'POST':
-		if request.form['username'] != app.config['USERNAME']:
-			error = 'Invalid username'
-		elif request.form['password'] != app.config['PASSWORD']:
-			error = 'Invalid password'
-		else:
-			session['logged_in'] = True
-			flash('You were logged in')
-			return redirect(url_for('show_entries'))
-	return render_template('login.html', error = error)
+@app.route('/queryDictionary', methods = ['GET', 'POST'])
+def queryDictionary():
+	try:
+		queriedWord = session['queriedWord'].decode('utf-8')
+		queriedWordFrequency = session['queriedWordFrequency'].decode('utf-8')
+	except:
+		queriedWord = ''
+		queriedWordFrequency = ''
+	return render_template('Query_Dictionary.html', queriedWord=queriedWord, queriedWordFrequency=queriedWordFrequency)
 
-@app.route('/logout')
-def logout():
-	"""Logout protocol"""
-	session.pop('logged_in', None)
-	flash('You were logged out')
-	return redirect(url_for('login'))
+@app.route('/sendQuery', methods = ['GET', 'POST'])
+def sendQuery():
+	query = request.form.get('query') #might have to fix encoding, keep in mind! look for decoding error
+	dictionary = open(jieba.get_abs_path_dict())
+	dictArray = _searchDictionary(dictionary, query)
+	try:
+		session['queriedWord'] = dictArray[0]
+		session['queriedWordFrequency'] = dictArray[1]
+	except:
+		print "Not found"
+	return redirect(url_for('queryDictionary'))
+
+''' pragma mark Helper Functions '''
+
+def _searchDictionary(dictionary, query):
+	for line in dictionary:
+		encodingDict = chardet.detect(line)
+		encoding = encodingDict['encoding']
+		line = unicode(line, encoding)
+		if query in line:
+			ind = line.find(' ')
+			word = line[0:ind]
+			if query == word:
+				print "Found it"
+				ind2 = line.rfind(' ')
+				frequency = line[ind+1:ind2]
+				return [word.encode('utf-8'),frequency.encode('utf-8')]
+	return []
 
 
 if __name__ == '__main__':

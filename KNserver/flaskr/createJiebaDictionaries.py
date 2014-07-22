@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
-import icu
+#import icu
+from chardet import detect
 
 cities = []
 """THIS IS THE LINE THAT GRABS THE CITY NAMES, DON'T UNCOMMENT OR RISK CREATING 4037 FILES"""
@@ -40,9 +41,31 @@ for city in cities :
 		newDict.write(dictionary)
 		newDict.close()
 
-#For speed-testing
+'''#For speed-testing
 timeB = datetime.now()
 print timeB
 
 timeE = timeB - timeA
-print timeE.seconds
+print timeE.seconds '''
+
+def makeUniform(originalDictPath,newDictPath):
+	"""Procedure: Converts all entries, if possible, in given dictionary to
+	UTF-8 encoding and writes to a new dictionary text file
+	Precondition: originaldictPath && newDictPath must be full valid paths
+	to dictionary text files"""
+	otxtFile = open(originalDictPath)
+	ntxtFile = open(newDictPath, 'w')
+	for line in otxtFile:
+		encodeDict = detect(line)
+		encoding = encodeDict['encoding']
+		if (encoding != 'utf-8'):
+			try:
+				line = unicode(line, encoding)
+				#line = line.encode('utf-8')
+				ntxtFile.write(line)
+			except:
+				print "Failed to re-encode line: " + line + "\n" + "with encoding " + encoding
+				ntxtFile.write(line + "--re-encodeFail" + encoding)
+	otxtFile.close()
+	ntxtFile.close()
+	print 'Process finished. Please review output for failed conversions.'

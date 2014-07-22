@@ -1,70 +1,45 @@
 {% extends "layout.html" %}
 {% block body %}
-  {% if session.logged_in %}
-    <!-- Form for selecting city and category -->
+  <!-- Form for selecting city and category -->
+  <form id="selectionContainer" action="{{ url_for('updateDictionary') }}" method=post>
+    <select name="cityContainer" id="cityContainer">
+      {% for key, value in citiesDict.iteritems() %}
+        <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
+      {% endfor %}
+    </select>
+    <select name="categoryContainer" id="categoryContainer">
+      <option id="used" value="ershou">二手</option>
+      <option id="employment" value="qiuzhi">求职</option>
+      <option id="vehicle" value="cheliang">车辆</option>
+      <option id="concurrent" value="jianzhi">兼职</option>
+      <option id="house" value="fangwu">房屋</option>
+      <option id="friends" value="jiaoyou">交友</option>
+      <option id="pet" value="chongwu">宠物</option>
+      <option id="recruit" value="zhaopin">招聘</option>
+      <option id="services" value="fuwu">服务</option>
+      <option id="cv" value="jianliku">简历库</option>
+      <option id="training" value="peixun">培训</option>
+    </select>
+    <input type='submit' value='Update Dictionary' />
+  </form>
 
-<<<<<<< HEAD
-    <form id="selectionContainer" action="{{ url_for('updateDictionary') }}" method=post>
-=======
-    <form id="selectionContainer" method=post>
->>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
-      <select id="cityContainer">
-        {% for key, value in citiesDict.iteritems() %}
-          <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
-        {% endfor %}
-      </select>
-      <select id="categoryContainer">
-        <option id="used" value="ershou">二手</option>
-        <option id="employment" value="qiuzhi">求职</option>
-        <option id="vehicle" value="cheliang">车辆</option>
-        <option id="concurrent" value="jianzhi">兼职</option>
-        <option id="house" value="fangwu">房屋</option>
-        <option id="friends" value="jiaoyou">交友</option>
-        <option id="pet" value="chongwu">宠物</option>
-        <option id="recruit" value="zhaopin">招聘</option>
-        <option id="services" value="fuwu">服务</option>
-        <option id="cv" value="jianliku">简历库</option>
-        <option id="training" value="peixun">培训</option>
-      </select>
-<<<<<<< HEAD
-      <input type='submit' value='Updated Dictionary' />
-    </form>
+  <!-- Form for input text entry -->
+  <form action="{{ url_for('process_words') }}" method=post class=add-entry>
+    <dl>
+      <dt>Text:
+      <dd><textarea name=text rows=15 cols=60></textarea>
+      <dd><input type=submit value=Process>
+    </dl>
+  </form>
 
-=======
-    </form>
+  <!-- Container form for segmented word checkboxes
+       and to submit checked boxes to dictionary -->
+  <form action="{{ url_for('addToDictionary') }}" method=post>
+    <h3 id="checkContainer"></h3>
+    <input type=submit value="Add to Dictionary" />
+  </form><br>
 
-        <!--
-        used
-        jobs
-        vehicles
-        part-time
-        housing
-        personals
-        pets
-        jobs
-        service
-        CV library
-        training -->
-
->>>>>>> 504264fe76475150b4225659abc6cfb2ec085dee
-    <!-- Form for input text entry -->
-    <form action="{{ url_for('process_words') }}" method=post class=add-entry>
-      <dl>
-        <dt>Text:
-        <dd><textarea name=text rows=15 cols=60></textarea>
-        <dd><input type=submit value=Process>
-      </dl>
-    </form>
-    
-    <!-- Container form for segmented word checkboxes
-         and to submit checked boxes to dictionary -->
-    <form action="{{ url_for('addToDictionary') }}" method=post>
-      <h3 id="checkContainer"></h3>
-      <input type=submit value="Add to Dictionary" />
-    </form><br>
-
-  {% endif %}
-
+  <!-- Display segmented text and database entries -->
   <body>
     <h2>
       {{ latest.text|safe }}

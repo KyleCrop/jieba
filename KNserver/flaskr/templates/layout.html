@@ -4,11 +4,10 @@
 <div class=page>
   <h1>NLP Test Site</h1>
   <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
+    <span class=metanav1>
+      <a href='{{ url_for('show_entries') }}'>Text Processor</a>
+    </span>
+    <a href="{{ url_for('queryDictionary') }}">Dictionary Query</a>
   </div>
   {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
