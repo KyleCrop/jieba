@@ -32,15 +32,14 @@ def createDicts() :
 	except:
 		pass
 
-	# NEED TO SPECIFY ENTIRE PATH FROM ROOT, so change 'kyle' to whatever necessary
+	"""
+	Need to make to make a separate directory for each city within 'dictionaries' directory
+	put each dictionary into the correct /dictionaries/city directory.
+	"""
 	for city in cities :
 		path = "/home/kyle/Documents/jieba/KNserver/flaskr/dictionaries/" + city
+		# NEED TO SPECIFY ENTIRE PATH FROM ROOT, so change 'kyle' to whatever necessary
 		os.mkdir(path)
-	
-		"""
-		Need to make to make a separate directory for each city within this directory
-		put each dictionary into the correct /dictionaries/city directory.
-		"""
 	
 		for category in categories :
 			fileName = "/home/kyle/Documents/jieba/KNserver/flaskr/dictionaries/" + city + "/" + city + "_" + category
