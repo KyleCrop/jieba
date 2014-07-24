@@ -1,8 +1,0 @@
-import urllib2
-import requests
-from requests.auth import HTTPBasicAuth
-
-url = "http://localhost:5000/"
-requests.get(url, auth=('miguel', 'python'))
-html = urllib2.urlopen(url)
-
