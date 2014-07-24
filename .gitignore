@@ -2,7 +2,6 @@
 ## Eclipse
 #################
 
-*~
 *.pydevproject
 .project
 .metadata
@@ -169,3 +168,4 @@ test/tmp/*
 *.class
 
 MANIFEST
+*~
