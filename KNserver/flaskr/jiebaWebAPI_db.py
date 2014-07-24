@@ -2,14 +2,6 @@
 import os
 import sqlite3
 
-#From Miguel Gringberg
-from requests.auth import HTTPBasicAuth
-
-#from separate modules
-from flaskr_blogapp import citiesDict  #global var, want to inherit from flask_blogapp, not updatedCities
-from jiebaWebAPI_process import *
-from jiebaWebAPI_search import *
-
 def connect_db():
 	"""Connects to the database
 	Uses sqlite3.Row object to represent rows - treat rows

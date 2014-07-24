@@ -1,17 +1,6 @@
 #necessary imports
-import os
-import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify, request, make_response
-import jieba
-import json
-import urllib2
+from jiebaWebAPI_process import *
 import chardet
-
-#From Miguel Gringberg
-from requests.auth import HTTPBasicAuth
-
-#from separate modules
-from flaskr_blogapp import citiesDict  #global var, want to inherit from flask_blogapp, not updatedCities
 
 def queryDictionary():
 	"""Adds queried word to session dictionary and renders the

@@ -1,26 +1,15 @@
 #necessary imports
-import os
-import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify, request, make_response
+from flask import Flask, redirect, url_for, render_template, flash
 import jieba
 import json
-import urllib2
-import chardet
-
-#From Miguel Gringberg
-from requests.auth import HTTPBasicAuth
 
 #from separate modules
-from flaskr_blogapp import citiesDict  #global var, want to inherit from flask_blogapp, not updatedCities
 from jiebaWebAPI_db import *
-from jiebaWebAPI_search import *
 
 def show_entries():
 	"""Populates view with entries from database,
 	passes entries to show_entries template and renders"""
 	print "works inside show_entries?"
-	session.clear()
-	print g
 	db = get_db()
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
@@ -53,6 +42,7 @@ def updateDictionary():
 	#jieba.set_dictionary('/home/noah/jieba/KNserver/flaskr/jieba/dictionaries/%(cityVar)s/%(cityVar)s_%(categoryVar)s.txt' % \ {'cityVar':city, 'catVar':category})
 	print "Operating dictionary is: " + str(jieba.get_abs_path_dict())
 	return redirect(url_for('show_entries'))
+
 
 
 
