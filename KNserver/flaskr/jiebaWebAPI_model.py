@@ -16,17 +16,16 @@ parseCitiesWhile()
 
 @app.errorhandler(400)
 def not_found(error):
-	return make_response(jsonify( { 'error': 'Bad request' } ), 400)
+	return make_response(json.dumps( { 'error': 'Bad request' } ), 400)
  
 @app.errorhandler(404)
 def not_found(error):
-	return make_response(jsonify( { 'error': 'Not found' } ), 404)
+	return make_response(json.dumps( { 'error': 'Not found' } ), 404)
 
 """pragma mark View Functionality"""
 
 @app.route('/')
 def model_show_entries():
-	print "works up to here?"
 	session.clear()
 	return show_entries()
 
@@ -44,8 +43,9 @@ def model_process_words():
 
 @app.route('/addWords', methods = ['POST'])
 def model_addToDictionary():
+	print "about to flash"
 	return addToDictionary()
-	
+
 @app.route('/updateDictionary', methods = ['POST'])
 def model_updateDictionary():
 	return updateDictionary()

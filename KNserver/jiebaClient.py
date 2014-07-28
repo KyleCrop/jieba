@@ -2,8 +2,8 @@ import urllib2
 import requests
 from requests.auth import HTTPBasicAuth
 
-url = "http://localhost:5000/"
-requests.get(url, auth=('miguel', 'python'))
+url = "http://0.0.0.0:5000/"
+requests.get(url, auth=('Baixing_JiebaAPI', 'Tu5kG7rq8PWpyqr'))
 html = urllib2.urlopen(url)
 
 """NEED TO TALK TO OUR APP TO DO ALL NECESSARY THINGS WITHOUT BROWSER RENDERINGS. 
