@@ -1,6 +1,6 @@
 Jieba API Documentation
 
-All API resources can be found at 'http://192.168.2.54:5000/APIresources"
+All API resources can be found at 'http://0.0.0.0:5000/APIresources"
 
 Get()
 	Returns: JSON representation of input cut by jieba method cut_for_search
