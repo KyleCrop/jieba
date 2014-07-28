@@ -24,7 +24,7 @@ def sendQuery():
 		session['queriedWordFrequency'] = dictArray[1]
 	except:
 		print "Not found"
-	return redirect(url_for('queryDictionary'))
+	return redirect(url_for('model_queryDictionary'))
 
 def _searchDictionary(dictionary, query):
 	"""Helper function: searches the dictionary text file for

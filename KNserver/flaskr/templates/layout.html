@@ -5,9 +5,9 @@
   <h1>NLP Test Site</h1>
   <div class=metanav>
     <span class=metanav1>
-      <a href='{{ url_for('show_entries') }}'>Text Processor</a>
+      <a href='{{ url_for('model_show_entries') }}'>Text Processor</a>
     </span>
-    <a href="{{ url_for('queryDictionary') }}">Dictionary Query</a>
+    <a href="{{ url_for('model_queryDictionary') }}">Dictionary Query</a>
   </div>
   {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>

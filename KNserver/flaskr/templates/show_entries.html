@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   <!-- Form for selecting city and category -->
-  <form id="selectionContainer" action="{{ url_for('updateDictionary') }}" method=post>
+  <form id="selectionContainer" action="{{ url_for('model_updateDictionary') }}" method=post>
     <select name="cityContainer" id="cityContainer">
       {% for key, value in citiesDict.iteritems() %}
         <option value="{{ key|safe }}" id="{{ key|safe }}">{{ value|safe }}</option>
@@ -24,7 +24,7 @@
   </form>
 
   <!-- Form for input text entry -->
-  <form action="{{ url_for('process_words') }}" method=post class=add-entry>
+  <form action="{{ url_for('model_process_words') }}" method=post class=add-entry>
     <dl>
       <dt>Text:
       <dd><textarea name=text rows=15 cols=60></textarea>
@@ -34,7 +34,7 @@
 
   <!-- Container form for segmented word checkboxes
        and to submit checked boxes to dictionary -->
-  <form action="{{ url_for('addToDictionary') }}" method=post>
+  <form action="{{ url_for('model_addToDictionary') }}" method=post>
     <h3 id="checkContainer"></h3>
     <input type=submit value="Add to Dictionary" />
   </form><br>

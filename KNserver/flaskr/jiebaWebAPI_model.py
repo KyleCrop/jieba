@@ -1,9 +1,9 @@
 #Noah Rubin, Kyle Crop
 #06/26/2014
-#Flaskr_blogapp.py
+#jiebaWebAPI_model.py
 
 #import necessary libraries and methods
-from flask import session, g, abort, request, make_response
+from flask import session, abort, make_response
 from updatedCities import citiesDict, getCitiesHTML, parseCitiesWhile
 from jiebaWebAPI_search import *
 # inheritance: jiebaWebAPI_db <- jiebaWebAPI_process <- jiebaWebAPI_search <- jiebaWebAPI_model
@@ -11,15 +11,6 @@ from jiebaWebAPI_search import *
 #Launch  "cronjob" python function to retreive updated cities list
 getCitiesHTML()
 parseCitiesWhile()
-
-"""pragma mark createApp"""
-
-#create the application and configure - note for bigger applications, configuration should be done in separate module
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = False, SECRET_KEY = 'baixing_jieba'))
-app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 
 #SECRET_KEY is to keep client-side sessions secure.  Make complex and hard to guess
 
