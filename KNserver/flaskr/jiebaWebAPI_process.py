@@ -9,9 +9,7 @@ from jiebaWebAPI_init import *
 def show_entries():
 	"""Populates view with entries from database,
 	passes entries to show_entries template and renders"""
-	print "works inside show_entries?"
 	db = get_db()
-	print "2 works inside show_entries?"
 	cur = db.execute('select proc, text from entries order by id desc') 
 	latest = cur.fetchone()
 	entries = cur.fetchall()

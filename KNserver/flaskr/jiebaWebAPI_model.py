@@ -26,7 +26,6 @@ def not_found(error):
 
 @app.route('/')
 def model_show_entries():
-	print "works up to here?"
 	session.clear()
 	return show_entries()
 
@@ -44,8 +43,9 @@ def model_process_words():
 
 @app.route('/addWords', methods = ['POST'])
 def model_addToDictionary():
+	print "about to flash"
 	return addToDictionary()
-	
+
 @app.route('/updateDictionary', methods = ['POST'])
 def model_updateDictionary():
 	return updateDictionary()
