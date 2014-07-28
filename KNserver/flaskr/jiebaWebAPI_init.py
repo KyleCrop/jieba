@@ -7,7 +7,7 @@ from flask import Flask, g, session
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-app.config.update(dict(DATABASE = os.path.join(app.root_path, 'flaskr.db'), DEBUG = True, SECRET_KEY = 'baixing_jieba'))
+app.config.update(dict(DATABASE = os.path.join(app.root_path, 'jiebaProcesses.db'), DEBUG = True, SECRET_KEY = 'baixing_jieba'))
 app.config.from_envvar('FLASKR_SETTINGS', silent = True)
 
 def connect_db():
