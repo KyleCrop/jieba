@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-    <form name='queryContainer' action='{{ url_for("sendQuery") }}' method=post>
+    <form name='queryContainer' action='{{ url_for("model_sendQuery") }}' method=post>
         <input type='text' name='query' />
         <input type=submit value=Search />
     </form>
