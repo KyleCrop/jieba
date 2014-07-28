@@ -1,7 +1,7 @@
 #necessary imports
 import os
 import sqlite3
-from flask import Flask, g
+from flask import Flask, g, session
 
 #create the application and configure - note for bigger applications, configuration should be done in separate module
 app = Flask(__name__)

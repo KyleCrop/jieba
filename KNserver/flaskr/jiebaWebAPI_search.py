@@ -8,7 +8,7 @@ def queryDictionary():
 	try:
 		queriedWord = session['queriedWord'].decode('utf-8')
 		queriedWordFrequency = session['queriedWordFrequency'].decode('utf-8')
-	except:
+	except:  #this is catching the 'session' not defined error
 		queriedWord = ''
 		queriedWordFrequency = ''
 	return render_template('Query_Dictionary.html', queriedWord=queriedWord, queriedWordFrequency=queriedWordFrequency)
@@ -22,8 +22,8 @@ def sendQuery():
 	try:
 		session['queriedWord'] = dictArray[0]
 		session['queriedWordFrequency'] = dictArray[1]
-	except:
-		print "Not found"
+	except IndexError:
+		print 'Not found'
 	return redirect(url_for('model_queryDictionary'))
 
 def _searchDictionary(dictionary, query):
