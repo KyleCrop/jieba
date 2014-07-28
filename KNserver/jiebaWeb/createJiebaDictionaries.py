@@ -26,8 +26,8 @@ def createDicts() :
 	print timeA
 	"""
 
-	# Create "dictionaries" directory if not already created, NEED TO SPECIFY PATH FROM ROOT
-	try: path = "/home/kyle/Documents/jieba/KNserver/flaskr/dictionaries"
+	""" Create "dictionaries" directory if not already created, NEED TO SPECIFY PATH FROM ROOT """
+	try: path = "/home/kyle/Documents/jieba/KNserver/jiebaWeb/dictionaries"
 		os.mkdir(path)
 	except:
 		pass
