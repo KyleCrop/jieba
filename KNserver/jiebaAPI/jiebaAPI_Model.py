@@ -12,12 +12,9 @@ from flask.ext.restful import Resource, Api, reqparse
 ''' pragma mark App configuration and Parser def'''
 
 app = Flask(__name__)
-#app.config.from_object(__name__)
-#app.config.update(dict(#DATABASE = os.path.join(app.root_path, set database), DEBUG = False))
 api = Api(app)
 
 parser = reqparse.RequestParser()
-#parser.add_argument('sentence', type=str)
 parser.add_argument('city', type=str)
 parser.add_argument('category', type=str)
 
@@ -71,4 +68,4 @@ api.add_resource(welcomeScreen, '/')
 api.add_resource(jiebaAPI, '/APIresources')
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True)
+	app.run(host='0.0.0.0')
