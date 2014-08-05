@@ -36,3 +36,26 @@ def extract_tags(sentence,topK=20):
     top_tuples= st_list[:topK]
     tags = [a[1] for a in top_tuples]
     return tags
+
+def extract_tags_withFrequency(sentence,topK=20):
+    words = jieba.cut(sentence)
+    freq = {}
+    for w in words:
+        if len(w.strip())<2: continue
+        if w.lower() in stop_words: continue
+        freq[w]=freq.get(w,0.0)+1.0
+    #total = sum(freq.values())
+    freq = [(k,v) for k,v in freq.iteritems()]
+
+    tf_idf_list = [(v * idf_freq.get(k,median_idf),k) for k,v in freq]
+    st_list = sorted(tf_idf_list,reverse=True)
+
+    top_tuples= st_list[:topK]
+    return top_tuples
+
+
+# freq list frequency is number of times occurs in corpus/total frequency of words
+#		percentage of words in corpus exlcuding words length < 2 and stop words
+#tf_idf_list is that percentage (as decimal) multiplied by frequency in idf.txt, or
+#median_idf default value
+#reverse sorted by frequency

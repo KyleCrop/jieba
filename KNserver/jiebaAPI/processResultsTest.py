@@ -13,16 +13,12 @@ rawCorpuses.append('8月1日拍摄的台湾高雄前镇爆炸事故现场。 7�
 rawCorpuses.append('7月17日下午，甘肃酒泉市政府办公室对外发布消息披露：“7月16 日，甘肃省玉门市发现一例鼠疫病例致1人死亡，目前死者遗体已按有关规范进行妥善处理'.decode('utf-8'))
 rawCorpuses.append('清凉小学，是安徽省蚌埠市固镇县的一所乡村小学。几年前，有人捐助了20万元为学校盖了栋三层教学楼，至今仍是村子里最高的建筑。摄影师用一年时间)'.decode('utf-8'))
 
-#Set up test user inquiry - rigged such that last corpus should be most relevant
+'''#Set up test user inquiry - rigged such that last corpus should be most relevant
 inquiry = '清凉小学几年前至今仍是村子里最高的建筑'.decode('utf-8')
 inquiryCut = jieba.cut_for_search(inquiry)
 inquiryCutStr = " | ".join(inquiry)
-inquiryList = constructArray(inquiry,' | ')
+inquiryList = constructArray(inquiry,' | ')'''
 
 def Main():
 	results = buildResultList(rawCorpuses)
-	print compareKeywords(inquiryList, results)
-	return compareKeywords(inquiryList,results)
-
-if __name__ == '__main__':
-	Main()
+	print results

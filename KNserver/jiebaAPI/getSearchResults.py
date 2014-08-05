@@ -6,6 +6,7 @@
 from requests import get, put
 from requests.auth import HTTPBasicAuth
 from urllib import quote_plus
+from urllib2 import urlopen
 
 inquiry = '婴儿床'.decode('utf-8')
 
@@ -20,7 +21,9 @@ def extractCorpuses(inquiry):
 	return rawCorpuses '''
 
 def Main():
-	query = get('http://www.ask.com/web?q=' + quote_plus(inquiry.encode('utf-8')))
+	query = get('http://www.ask.com/web?q=' + quote_plus(inquiry.encode('utf-8')) + 'site:sh.58.com')
+	print query.headers
 	print query.apparent_encoding
 	print query.encoding
 	print query.text
+	# find helpful resources and parse those links, not relevant adds

@@ -21,12 +21,11 @@ def buildResultList(corpusList):
 	corpus and set in keywords attribute
 	Precondition: resultList is a list of 5 strings"""
 	assert len(corpusList) <= 5, 'list has more than 5 elements'
-	results = []
-	for corpusStr in corpusList:
-		results.append(Result(corpusStr))
-	#extract keywords from corpuses - topK set to 15
-	for result in results:
-		result.setKeywords(jieba.analyse.extract_tags(result.corpus,15))
+	results = {}
+	for corpus in corpusList:
+		keywords = jieba.analyse.extract_tags_withFrequency(corpus,15)
+		for keyword in keywords:
+			results[keyword[1]] = results.get(keyword[1],0.0)+keyword[0]
 	return results
 
 ''' pragma mark Determine most relevant link'''
@@ -39,53 +38,16 @@ def compareKeywords(inquiryList, results):
 	of Result objects with non-empy keywords lists and relevancy
 	set to 0"""
 	maxRelevancy = 0
-	finalCorpus = ''
-	for result in results:
-		for word in inquiryList:
-			if word in result.getKeywords():
-				result.incrementRel()
-		if result.getRelevancy() > maxRelevancy:
-			finalCorpus = result.getCorpus()
-	return finalCorpus
+	resultsCopy = results
+	for keyword in resultsCopy:
+		times_in = 0
+		for word in inquiry:
+			if word in keyword[0]:
+				times_in += 1
+		if times_in == 0:
+			resultsCopy.remove(keyword)
+	return resultsCopy
 
-''' pragma mark Result Class '''
 
-class Result(object):
-	"""Each instance is corpus from search result, relevancy information,
-	and a list of keywords"""
-
-#constructor
-	def __init__(self,corpusStr):
-		"""Constructor for Result object
-		Returns: Link object with attributes corpus (str),
-		relevancy (int) initially set to 0, and keywords (list of str)
-		Precondition: corpus is of type str"""
-		super(Result, self).__init__()
-		corpus = corpusStr
-		relevancy = 0
-		keywords = []
-
-#getters
-	def getCorpus(self):
-		"""Getter for url"""
-		return corpus
-
-	def getRelevancy(self):
-		"""Getter for relevancy"""
-		return relevancy
-
-	def getKeywords(self):
-		"""Getter for keywords list"""
-		return keywords
-
-#setters
-	def setKeywords(self,keywordList):
-		"""Setter fro keywords list"""
-		keywords = keywordList
-
-#methods
-	def incrementRel(self):
-		"""Procedure: increment relevancy attr"""
-		relevancy += 1
 
 
