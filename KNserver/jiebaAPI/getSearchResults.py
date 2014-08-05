@@ -23,4 +23,4 @@ def Main():
 	query = get('http://www.ask.com/web?q=' + quote_plus(inquiry.encode('utf-8')))
 	print query.apparent_encoding
 	print query.encoding
-	return query.text
+	print query.text
