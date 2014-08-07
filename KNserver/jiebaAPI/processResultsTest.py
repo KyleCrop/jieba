@@ -21,4 +21,5 @@ inquiryList = constructArray(inquiry,' | ')'''
 
 def Main():
 	results = buildResultList(rawCorpuses)
-	print results
+	for item in results:
+		print item

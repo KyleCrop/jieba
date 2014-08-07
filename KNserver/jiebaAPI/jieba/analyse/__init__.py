@@ -1,3 +1,8 @@
+#This file uses the encoding: utf-8
+#All credit goes to the creators of
+#the Jieba project
+#Edited by Noah Rubin on August 7, 2014
+
 import jieba
 import os
 try:
@@ -37,7 +42,16 @@ def extract_tags(sentence,topK=20):
     tags = [a[1] for a in top_tuples]
     return tags
 
+# >>>>>>>>>>> Edit by Noah Rubin
+
 def extract_tags_withFrequency(sentence,topK=20):
+    """Returns: List of tuples of length topK sorted by decreasing frequency
+    Note: Tuples have format (frequency,word)
+          Default topK value is 20
+    Frequency calculated as follows:
+        1. Count number of times occurs in corpus
+        2. Multiply by frequency in idf.text, or median_idf as default val
+    Precondition: sentence is of type string"""
     words = jieba.cut(sentence)
     freq = {}
     for w in words:
@@ -53,9 +67,4 @@ def extract_tags_withFrequency(sentence,topK=20):
     top_tuples= st_list[:topK]
     return top_tuples
 
-
-# freq list frequency is number of times occurs in corpus/total frequency of words
-#		percentage of words in corpus exlcuding words length < 2 and stop words
-#tf_idf_list is that percentage (as decimal) multiplied by frequency in idf.txt, or
-#median_idf default value
-#reverse sorted by frequency
+# <<<<<<<<<<<<<
