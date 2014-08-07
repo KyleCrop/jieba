@@ -8,14 +8,15 @@ import jieba.analyse
 
 ''' pragma mark Format user inquiry '''
 
-#used to construct array from user inquiry
 def constructArray(sentence,delimiter=' '):
 	"""Returns: array of objects separated by delimiter (defaults to one white space)
 
+		
 		Example: constructArray('I love cheese', ' ') --> ['I', 'love', 'cheese']
 
 	Preconditions: sentence and delimiter are of type str"""
-	return sentence.split(delimiter)
+	inquiryList = sentence.split(delimiter)
+	return set(inquiryList)
 
 ''' pragma mark Extract result keywords '''
 
@@ -39,25 +40,33 @@ def buildResultDict(corpusList):
 
 ''' pragma mark Determine most comprehensive result'''
 
-def compareKeywords(inquiryList, results):
-	"""Returns: Dictionary containing top 5 highest frequency
-	words that have at least one word in common with user inquiry
+def compareKeywords(inquiryList, results, topK = 6):
+	"""Returns: List of tuples containing top topK highest frequency
+	words that have at least one character in common with inquiry
 
 		Example: If inquiry contains "床," then "婴儿床" would be
 		passible with high enough frequency
 
 		Note: The speed of this algorithm is heavily dependent on
 		the length of user inquiry. Speed is proportional to number
-		of words in inquiry and number of keywords (constant at 75)
+		of words in inquiry and number of keywords (max distinct 75)
 
-	Precondition: inquiryList is a string list, results is dictionary
-	of tuples"""
-	resultsCopy = {} #maintain integrity of results data
-	for keyword in resultsCopy:
-		for word in inquiry:
-			if word in keyword[0]:
-			resultsCopy.remove(keyword)
-	return resultsCopy
+	Precondition: inquiryList is a string list, results is dictionary"""
+	resultsCopy = set([]) #maintain integrity of results data
+	for key in results:
+		for word in inquiryList:
+			if word in key:
+				print "found a match"
+				newTuple = (key,results.get(key,0.0))
+				resultsCopy.add(newTuple)
+	resultsCopy = list(resultsCopy)
+	resultsCopy = sorted(resultsCopy, key = _getKey, reverse=True)
+	return resultsCopy[:topK]
+
+def _getKey(item):
+	"""Helper method for compareKeywords
+	Returns: Key of tuple to be used for sorting"""
+	return item[1]
 
 
 
